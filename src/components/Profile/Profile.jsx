@@ -22,7 +22,6 @@ function Profile({ applicant, onBack }) {
 
   const emailSlug = businessName.toLowerCase().replace(/[^a-z0-9]+/g, '.');
   const email = `${emailSlug}@example.com`;
-  const statusToken = String(currentStatus).toLowerCase().replace(/\s+/g, '-');
 
   return (
     <section className="profile" aria-labelledby="profile-title">
@@ -54,39 +53,6 @@ function Profile({ applicant, onBack }) {
             >
               {businessName}
             </h2>
-            <div className="profile-badges">
-              <span
-                className={`profile-status profile-status--${statusToken}`}
-                aria-label={`Application status: ${currentStatus}`}
-              >
-                {currentStatus}
-              </span>
-              <span
-                className="profile-chip"
-                title="Application type"
-                aria-label={`Application type: ${application}`}
-              >
-                {application}
-              </span>
-              <span
-                className="profile-chip"
-                title="Submitted date"
-                aria-label={`Submitted on ${new Date(date).toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}`}
-              >
-                {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-              </span>
-              <span
-                className="profile-chip"
-                title="Payment status"
-                aria-label={`Payment status: ${payment}`}
-              >
-                {payment}
-              </span>
-            </div>
           </div>
         </div>
         <div className="profile-hero-actions" role="group" aria-label="Primary actions">
@@ -99,6 +65,28 @@ function Profile({ applicant, onBack }) {
           </a>
         </div>
       </header>
+
+      {/* Summary stats */}
+      <ul className="profile-stats" aria-label="Application summary">
+        <li className="profile-stat">
+          <span className="profile-stat-k">Application</span>
+          <span className="profile-stat-v">{application}</span>
+        </li>
+        <li className="profile-stat">
+          <span className="profile-stat-k">Status</span>
+          <span className="profile-stat-v">{currentStatus}</span>
+        </li>
+        <li className="profile-stat">
+          <span className="profile-stat-k">Submitted</span>
+          <span className="profile-stat-v">
+            {new Date(date).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </span>
+        </li>
+      </ul>
 
       {/* Content grid */}
       <div className="profile-grid">
@@ -164,7 +152,24 @@ function Profile({ applicant, onBack }) {
         )}
       </div>
 
-      
+      {/* Sticky actions on mobile */}
+      <div className="profile-sticky-actions" aria-label="Profile actions">
+        <button
+          type="button"
+          className="profile-btn profile-btn--ghost"
+          onClick={onBack}
+          aria-label="Back to applications"
+        >
+          <ArrowLeft size={16} aria-hidden /> Back
+        </button>
+        <a
+          className="profile-btn profile-btn--primary"
+          href={`mailto:${email}`}
+          aria-label={`Email ${businessName}`}
+        >
+          <Mail size={16} aria-hidden /> Message
+        </a>
+      </div>
     </section>
   );
 }
