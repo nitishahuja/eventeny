@@ -66,12 +66,7 @@ function App() {
               role='search'
               aria-label='Search and filter applications'
             >
-              <Search
-                value={searchValue}
-                onChange={setSearchValue}
-                showEmptyState={searchValue.length > 0 && !loading && rows.length === 0}
-                emptyStateMessage={'No results match your search.'}
-              />
+              <Search value={searchValue} onChange={setSearchValue} />
               <Filters
                 rows={rows}
                 filters={filters}
@@ -80,7 +75,11 @@ function App() {
               />
             </header>
             <main id='main-content' className='app-main' tabIndex={-1}>
-              <Table rows={rows} loading={loading} onViewApplicant={handleViewApplicant} />
+              <Table
+                rows={rows}
+                loading={loading}
+                onViewApplicant={handleViewApplicant}
+              />
             </main>
           </>
         ) : (
