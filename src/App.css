@@ -42,6 +42,19 @@
   overflow-x: clip;
 }
 
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.app-header-logo {
+  display: block;
+  height: 32px;
+  width: auto;
+}
+
 .app-top {
   display: flex;
   flex-direction: column;

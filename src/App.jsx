@@ -59,6 +59,13 @@ function App() {
         Skip to main content
       </a>
       <div className='app'>
+        <header className='app-header' aria-label='Eventeny'>
+          <img
+            src='/logo-page-header.svg'
+            alt='Eventeny'
+            className='app-header-logo'
+          />
+        </header>
         {!selectedApplicant ? (
           <>
             <header
