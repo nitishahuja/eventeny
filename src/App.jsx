@@ -66,7 +66,12 @@ function App() {
               role='search'
               aria-label='Search and filter applications'
             >
-              <Search value={searchValue} onChange={setSearchValue} />
+              <Search
+                value={searchValue}
+                onChange={setSearchValue}
+                showEmptyState={searchValue.length > 0 && !loading && rows.length === 0}
+                emptyStateMessage={'No results match your search.'}
+              />
               <Filters
                 rows={rows}
                 filters={filters}
