@@ -25,7 +25,7 @@ function formatDate(dateStr) {
   });
 }
 
-function Table({ rows = [], loading = false }) {
+function Table({ rows = [], loading = false, onViewApplicant }) {
   const [sortDir, setSortDir] = useState('asc');
   const [selected, setSelected] = useState(new Set());
   const [page, setPage] = useState(1);
@@ -193,7 +193,18 @@ function Table({ rows = [], loading = false }) {
                         height={32}
                       />
                       <div>
-                        <span className='table-business-name'>
+                        <span
+                          className='table-business-name'
+                          onClick={() => onViewApplicant?.(row)}
+                          role='button'
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              onViewApplicant?.(row);
+                            }
+                          }}
+                        >
                           {row.businessName}
                         </span>
                         <span className='table-business-applicant'>
@@ -294,7 +305,18 @@ function Table({ rows = [], loading = false }) {
                       height={32}
                     />
                     <div>
-                      <span className='table-business-name'>
+                      <span
+                        className='table-business-name'
+                        onClick={() => onViewApplicant?.(row)}
+                        role='button'
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            onViewApplicant?.(row);
+                          }
+                        }}
+                      >
                         {row.businessName}
                       </span>
                       <span className='table-business-applicant'>

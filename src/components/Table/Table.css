@@ -310,6 +310,7 @@
   display: block;
   font-weight: 500;
   color: #0389a0;
+  cursor: pointer;
 }
 
 .table-business-applicant {
