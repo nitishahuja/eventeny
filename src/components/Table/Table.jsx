@@ -120,7 +120,11 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
       aria-label='Applications table'
     >
       {someSelected && (
-        <div className='table-bulk-bar' role='toolbar' aria-label='Bulk actions'>
+        <div
+          className='table-bulk-bar'
+          role='toolbar'
+          aria-label='Bulk actions'
+        >
           <span className='table-bulk-count'>
             {selected.size} {selected.size === 1 ? 'row' : 'rows'} selected
           </span>
@@ -235,9 +239,9 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                   <td className='table-cell'>
                     <div className='table-tags'>
                       {row.tag.slice(0, 3).map((t) => (
-                        <span key={t} className='table-tag'>
+                        <button key={t} type='button' className='table-tag'>
                           {t}
-                        </span>
+                        </button>
                       ))}
                     </div>
                   </td>
@@ -379,7 +383,9 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                   <div className='table-card-field'>
                     <span className='table-link'>{row.application}</span>
                     <span aria-hidden>•</span>
-                    <span className={`table-status ${STATUS_COLORS[row.currentStatus] || ''}`}>
+                    <span
+                      className={`table-status ${STATUS_COLORS[row.currentStatus] || ''}`}
+                    >
                       {row.currentStatus}
                     </span>
                     <span aria-hidden>•</span>
@@ -399,50 +405,50 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
       </div>
 
       <nav className='table-pagination' aria-label='Table pagination'>
-          <button
-            type='button'
-            className='table-pagination-btn'
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page <= 1}
-            aria-label='Previous page'
-          >
-            <ChevronLeft size={18} strokeWidth={2} aria-hidden />
-          </button>
-          <div
-            className='table-pagination-pages'
-            role='group'
-            aria-label='Page numbers'
-          >
-            {Array.from({ length: Math.min(9, totalPages) }, (_, i) => {
-              let p;
-              if (totalPages <= 9) p = i + 1;
-              else if (page <= 5) p = i + 1;
-              else if (page >= totalPages - 4) p = totalPages - 8 + i;
-              else p = page - 4 + i;
-              return (
-                <button
-                  key={p}
-                  type='button'
-                  className={`table-pagination-page ${page === p ? 'table-pagination-page--active' : ''}`}
-                  onClick={() => setPage(p)}
-                  aria-label={`Page ${p}`}
-                  aria-current={page === p ? 'page' : undefined}
-                >
-                  {p}
-                </button>
-              );
-            })}
-          </div>
-          <button
-            type='button'
-            className='table-pagination-btn'
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page >= totalPages}
-            aria-label='Next page'
-          >
-            <ChevronRight size={18} strokeWidth={2} aria-hidden />
-          </button>
-        </nav>
+        <button
+          type='button'
+          className='table-pagination-btn'
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page <= 1}
+          aria-label='Previous page'
+        >
+          <ChevronLeft size={18} strokeWidth={2} aria-hidden />
+        </button>
+        <div
+          className='table-pagination-pages'
+          role='group'
+          aria-label='Page numbers'
+        >
+          {Array.from({ length: Math.min(9, totalPages) }, (_, i) => {
+            let p;
+            if (totalPages <= 9) p = i + 1;
+            else if (page <= 5) p = i + 1;
+            else if (page >= totalPages - 4) p = totalPages - 8 + i;
+            else p = page - 4 + i;
+            return (
+              <button
+                key={p}
+                type='button'
+                className={`table-pagination-page ${page === p ? 'table-pagination-page--active' : ''}`}
+                onClick={() => setPage(p)}
+                aria-label={`Page ${p}`}
+                aria-current={page === p ? 'page' : undefined}
+              >
+                {p}
+              </button>
+            );
+          })}
+        </div>
+        <button
+          type='button'
+          className='table-pagination-btn'
+          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+          disabled={page >= totalPages}
+          aria-label='Next page'
+        >
+          <ChevronRight size={18} strokeWidth={2} aria-hidden />
+        </button>
+      </nav>
     </div>
   );
 }
