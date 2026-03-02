@@ -313,34 +313,31 @@ function Table({ rows = [], loading = false }) {
                 </div>
                 <div className='table-card-fields'>
                   <div className='table-card-field'>
-                    <span className='table-card-label'>Tag</span>
                     <div className='table-tags'>
-                      {row.tag.slice(0, 3).map((t) => (
+                      {row.tag.slice(0, 2).map((t) => (
                         <span key={t} className='table-tag'>
                           {t}
                         </span>
                       ))}
+                      {row.tag.length > 2 && (
+                        <span className='table-tag'>+{row.tag.length - 2}</span>
+                      )}
                     </div>
                   </div>
                   <div className='table-card-field'>
-                    <span className='table-card-label'>Application</span>
                     <span className='table-link'>{row.application}</span>
-                  </div>
-                  <div className='table-card-field'>
-                    <span className='table-card-label'>Payment</span>
-                    <span>{row.payment === 'paid' ? 'Paid' : 'Not Paid'}</span>
-                  </div>
-                  <div className='table-card-field'>
-                    <span className='table-card-label'>Status</span>
-                    <span
-                      className={`table-status ${STATUS_COLORS[row.currentStatus] || ''}`}
-                    >
+                    <span aria-hidden>•</span>
+                    <span className={`table-status ${STATUS_COLORS[row.currentStatus] || ''}`}>
                       {row.currentStatus}
                     </span>
-                  </div>
-                  <div className='table-card-field'>
-                    <span className='table-card-label'>Date</span>
+                    <span aria-hidden>•</span>
                     <span>{formatDate(row.date)}</span>
+                    {row.payment === 'paid' && (
+                      <>
+                        <span aria-hidden>•</span>
+                        <span>Paid</span>
+                      </>
+                    )}
                   </div>
                 </div>
               </article>

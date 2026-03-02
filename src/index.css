@@ -22,7 +22,12 @@
 html {
   width: 100%;
   max-width: 100%;
+  min-height: 100vh;
   overflow-x: clip;
+  /* Keep horizontal gestures from chaining to parent contexts */
+  overscroll-behavior-x: contain;
+  /* Prefer vertical panning only at the page level */
+  touch-action: pan-y;
 }
 
 @supports not (overflow: clip) {
@@ -35,7 +40,10 @@ body {
   margin: 0;
   width: 100%;
   max-width: 100%;
+  min-height: 100vh;
   overflow-x: clip;
+  overscroll-behavior-x: contain;
+  touch-action: pan-y;
 }
 
 @supports not (overflow: clip) {
@@ -48,9 +56,11 @@ body {
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  min-height: 100vh;
   background-color: #fff;
   overflow-x: clip;
   overscroll-behavior-x: contain;
+  touch-action: pan-y;
 }
 
 @supports not (overflow: clip) {

@@ -54,6 +54,11 @@
   flex-shrink: 0;
 }
 
+/* Ensure children can shrink without forcing horizontal overflow */
+.app-top > * {
+  min-width: 0;
+}
+
 .app-main {
   flex: 0 1 auto;
   width: 100%;
