@@ -1,7 +1,15 @@
+import { useEffect, useRef } from 'react';
 import { ArrowLeft, Mail, Phone, Globe } from 'lucide-react';
 import './Profile.css';
 
 function Profile({ applicant, onBack }) {
+  const headingRef = useRef(null);
+
+  useEffect(() => {
+    if (!applicant) return;
+    headingRef.current?.focus();
+  }, [applicant]);
+
   if (!applicant) return null;
 
   const {
@@ -38,23 +46,55 @@ function Profile({ applicant, onBack }) {
             height={64}
           />
           <div className="profile-hero-meta">
-            <h2 id="profile-title" className="profile-name" tabIndex={-1}>
+            <h2
+              id="profile-title"
+              ref={headingRef}
+              className="profile-name"
+              tabIndex={-1}
+            >
               {businessName}
             </h2>
             <div className="profile-badges">
-              <span className={`profile-status profile-status--${statusToken}`}>
+              <span
+                className={`profile-status profile-status--${statusToken}`}
+                aria-label={`Application status: ${currentStatus}`}
+              >
                 {currentStatus}
               </span>
-              <span className="profile-chip" title="Application type">{application}</span>
-              <span className="profile-chip" title="Submitted date">
+              <span
+                className="profile-chip"
+                title="Application type"
+                aria-label={`Application type: ${application}`}
+              >
+                {application}
+              </span>
+              <span
+                className="profile-chip"
+                title="Submitted date"
+                aria-label={`Submitted on ${new Date(date).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}`}
+              >
                 {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </span>
-              <span className="profile-chip" title="Payment status">{payment}</span>
+              <span
+                className="profile-chip"
+                title="Payment status"
+                aria-label={`Payment status: ${payment}`}
+              >
+                {payment}
+              </span>
             </div>
           </div>
         </div>
         <div className="profile-hero-actions" role="group" aria-label="Primary actions">
-          <a className="profile-btn profile-btn--ghost" href={`mailto:${email}`}>
+          <a
+            className="profile-btn profile-btn--ghost"
+            href={`mailto:${email}`}
+            aria-label={`Email ${businessName}`}
+          >
             <Mail size={16} aria-hidden /> Message
           </a>
         </div>

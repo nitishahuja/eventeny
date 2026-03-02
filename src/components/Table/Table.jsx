@@ -385,6 +385,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                     <span aria-hidden>•</span>
                     <span
                       className={`table-status ${STATUS_COLORS[row.currentStatus] || ''}`}
+                      aria-label={`${row.currentStatus} status`}
                     >
                       {row.currentStatus}
                     </span>

@@ -98,8 +98,17 @@ function FiltersDropdown({ filters = {}, onChange, applications = [] }) {
           ariaLabel='Application'
         />
         <div className='filters-field'>
-          <h3 className='filters-section-title'>Status</h3>
-          <div className='filters-checkbox-grid'>
+          <h3
+            id='filters-status-heading'
+            className='filters-section-title'
+          >
+            Status
+          </h3>
+          <div
+            className='filters-checkbox-grid'
+            role='group'
+            aria-labelledby='filters-status-heading'
+          >
             {STATUS_OPTIONS.map((option) => (
               <label key={option} className='filters-checkbox-label'>
                 <input
@@ -114,8 +123,17 @@ function FiltersDropdown({ filters = {}, onChange, applications = [] }) {
           </div>
         </div>
         <div className='filters-field'>
-          <h3 className='filters-section-title'>Payment status</h3>
-          <div className='filters-checkbox-grid'>
+          <h3
+            id='filters-payment-heading'
+            className='filters-section-title'
+          >
+            Payment status
+          </h3>
+          <div
+            className='filters-checkbox-grid'
+            role='group'
+            aria-labelledby='filters-payment-heading'
+          >
             {PAYMENT_OPTIONS.map(({ value, label }) => (
               <label key={value} className='filters-checkbox-label'>
                 <input

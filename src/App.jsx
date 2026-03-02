@@ -71,10 +71,6 @@ function App() {
   const handleViewApplicant = async (row) => {
     const { ok, row: profile } = await getApplicantProfile(row.businessName);
     setSelectedApplicant(ok && profile ? profile : row);
-    queueMicrotask(() => {
-      const el = document.querySelector('.profile-name');
-      if (el && typeof el.focus === 'function') el.focus();
-    });
   };
 
   const handleBackToList = () => setSelectedApplicant(null);
