@@ -71,6 +71,7 @@
 }
 
 .filters-section-title {
+  font-weight: 200;
   margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
   font-weight: 600;
@@ -84,6 +85,7 @@
 }
 
 .filters-checkbox-label {
+  font-weight: 200;
   display: flex;
   align-items: center;
   gap: 0.5rem;

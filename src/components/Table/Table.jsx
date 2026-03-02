@@ -231,7 +231,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                           {row.businessName}
                         </span>
                         <span className='table-business-applicant'>
-                          Applicant
+                          Applicant Name
                         </span>
                       </div>
                     </div>
@@ -239,9 +239,9 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                   <td className='table-cell'>
                     <div className='table-tags'>
                       {row.tag.slice(0, 3).map((t) => (
-                        <button key={t} type='button' className='table-tag'>
+                        <span key={t} className='table-tag'>
                           {t}
-                        </button>
+                        </span>
                       ))}
                     </div>
                   </td>
@@ -251,7 +251,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                   <td className='table-cell'>
                     {row.payment === 'paid' ? 'Paid' : 'Not Paid'}
                   </td>
-                  <td className='table-cell'>
+                  <td className='table-cell table-cell--status'>
                     <span
                       className={`table-status table-status-pill ${
                         STATUS_COLORS[row.currentStatus] || ''

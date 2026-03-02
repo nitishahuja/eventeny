@@ -1,8 +1,8 @@
-.filters-dropdown {
+.select-dropdown {
   margin-bottom: 1rem;
 }
 
-.filters-dropdown-trigger {
+.select-dropdown-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,25 +10,25 @@
   padding: 0.5rem 0.75rem;
   background: #fff;
   border: 1px solid #9daaa5;
-  border-radius: 8px;
+  border-radius: 16px;
   font-family: inherit;
   font-size: 1rem;
+  font-weight: 200;
   color: #213547;
   cursor: pointer;
   transition: border-color 0.2s ease;
 }
 
-.filters-dropdown-trigger:hover {
+.select-dropdown-trigger:hover {
   border-color: #3f4242;
 }
 
-.filters-dropdown-trigger:focus {
+.select-dropdown-trigger:focus {
   outline: none;
   border-color: #0389a0;
 }
 
-.filters-dropdown-list {
-  /* position: static so overflow-y: auto on the parent panel doesn't clip it */
+.select-dropdown-list {
   position: static;
   margin: 4px 0 0 0;
   padding: 0.25rem 0;
@@ -43,7 +43,7 @@
   touch-action: pan-y;
 }
 
-.filters-dropdown-option {
+.select-dropdown-option {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,25 +54,27 @@
   background: none;
   font-family: inherit;
   font-size: 0.9375rem;
+  font-weight: 200;
   color: #213547;
   text-align: left;
   cursor: pointer;
 }
 
-.filters-dropdown-option:hover {
+.select-dropdown-option:hover {
   background: rgba(157, 170, 165, 0.12);
 }
 
-.filters-dropdown-option--selected {
-  font-weight: 500;
+.select-dropdown-option--selected {
+  font-weight: 400;
 }
 
-.filters-dropdown-check {
+.select-dropdown-check {
   flex-shrink: 0;
   color: #0389a0;
 }
 
-.filters-dropdown-option:focus {
+.select-dropdown-option:focus {
   outline: none;
   background: rgba(3, 137, 160, 0.12);
 }
+

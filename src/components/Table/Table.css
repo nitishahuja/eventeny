@@ -352,14 +352,20 @@
 }
 
 .table-status-pill {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 0.375rem;
   padding: 0.35rem 0.9rem;
   border-radius: 9999px;
   font-size: 0.875rem;
   font-weight: 500;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.table-cell--status {
+  width: 1%;
 }
 
 .table-status-text {
@@ -437,15 +443,13 @@
 }
 
 .table-pagination-btn {
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
   padding: 0;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  background: #fff;
   color: #3f4242;
   cursor: pointer;
   transition:
@@ -475,12 +479,10 @@
 }
 
 .table-pagination-page {
+  background: transparent;
   min-width: 36px;
   height: 36px;
   padding: 0 0.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  background: #fff;
   font-size: 0.875rem;
   color: #3f4242;
   cursor: pointer;
