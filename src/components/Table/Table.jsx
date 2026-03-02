@@ -73,9 +73,12 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
     });
   };
 
+  const clearSelection = () => setSelected(new Set());
+
   const allOnPageSelected =
     pageRows.length > 0 &&
     pageRows.every((_, i) => selected.has((page - 1) * ROWS_PER_PAGE + i));
+  const someSelected = selected.size > 0;
 
   if (loading) {
     return (
@@ -115,6 +118,21 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
       role='region'
       aria-label='Applications table'
     >
+      {someSelected && (
+        <div className='table-bulk-bar' role='toolbar' aria-label='Bulk actions'>
+          <span className='table-bulk-count'>
+            {selected.size} {selected.size === 1 ? 'row' : 'rows'} selected
+          </span>
+          <button
+            type='button'
+            className='table-bulk-clear'
+            onClick={clearSelection}
+            aria-label='Clear selection'
+          >
+            Clear selection
+          </button>
+        </div>
+      )}
       {/* Desktop: table layout */}
       <div className='table-desktop table-scroll'>
         <table className='table' role='table' aria-label='Applications'>
