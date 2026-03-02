@@ -1,0 +1,576 @@
+.table-wrapper {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow-x: clip;
+  overflow-y: visible;
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@supports not (overflow: clip) {
+  .table-wrapper {
+    overflow-x: hidden;
+  }
+}
+
+.table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 160px;
+  padding: 1.5rem;
+  color: #3f4242;
+}
+
+.table-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #0389a0;
+  border-radius: 50%;
+  animation: table-spin 0.8s linear infinite;
+}
+
+@keyframes table-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.table-empty {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: #3f4242;
+}
+
+.table-empty p {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.table-empty-hint {
+  font-size: 0.9375rem;
+  color: #9daaa5;
+}
+
+.table-bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(3, 137, 160, 0.08);
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.table-bulk-count {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #0389a0;
+}
+
+.table-bulk-clear {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #0389a0;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 0.875rem;
+  color: #0389a0;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.table-bulk-clear:hover {
+  background: #0389a0;
+  color: #fff;
+}
+
+.table-bulk-clear:focus {
+  outline: 2px solid #0389a0;
+  outline-offset: 2px;
+}
+
+/* Desktop: show table, hide cards */
+.table-desktop {
+  display: block;
+}
+
+.table-cards {
+  display: none;
+}
+
+/* Mobile/tablet: hide table, show stacked cards (avoids overflow/grey at ~768–900px) */
+@media (max-width: 899px) {
+  .table-desktop {
+    display: none;
+  }
+
+  .table-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .table-cards-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .table-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .table-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .table-card:last-child {
+    border-bottom: none;
+  }
+
+  .table-card-row--main {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .table-card-row--main .table-check-label {
+    flex-shrink: 0;
+  }
+
+  .table-card-row--main .table-business {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .table-card-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: calc(1rem + 16px); /* align with content after checkbox */
+  }
+
+  .table-card-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .table-card-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9daaa5;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* Must not expand to fit table; width comes from parent so overflow-x can scroll */
+.table-scroll {
+  flex: 0 1 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  font-size: 0.9375rem;
+  min-width: 600px;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table th {
+  font-weight: 600;
+  color: #3f4242;
+  background: #f9fafb;
+}
+
+.table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.table-row--selected {
+  background: rgba(3, 137, 160, 0.06);
+}
+
+.table-row--selected:hover {
+  background: rgba(3, 137, 160, 0.1);
+}
+
+.table-cell--check {
+  width: 44px;
+  padding-right: 0.5rem;
+}
+
+.table-checkbox {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: #0389a0;
+  cursor: pointer;
+}
+
+.table-check-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.table-cell--sortable {
+  white-space: nowrap;
+}
+
+.table-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.table-sort-btn:hover {
+  color: #0389a0;
+}
+
+.table-sort-btn:focus {
+  outline: 2px solid #0389a0;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.table-business {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.table-business-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fafafa;
+  border: 1px solid #c4cac9;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.table-business-name {
+  display: block;
+  font-weight: 500;
+  color: #0389a0;
+}
+
+.table-business-applicant {
+  display: block;
+  font-size: 0.8125rem;
+  color: #9daaa5;
+}
+
+.table-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.table-tag {
+  padding: 0.25rem 0.5rem;
+  background: #f3f4f6;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  color: #3f4242;
+}
+
+.table-link {
+  color: #0389a0;
+  font-weight: 500;
+}
+
+.table-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.table-status--awaiting {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.table-status--approved {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.table-status--waitlisted {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.table-status--rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.table-status--withdrawn {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.table-cell--action {
+  width: 48px;
+}
+
+.table-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border: none;
+  background: none;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 4px;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+
+.table-action-btn:hover {
+  color: #0389a0;
+  background: rgba(3, 137, 160, 0.08);
+}
+
+.table-action-btn:focus {
+  outline: 2px solid #0389a0;
+  outline-offset: 2px;
+}
+
+.table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem;
+  border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.table-pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+  color: #3f4242;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.table-pagination-btn:hover:not(:disabled) {
+  border-color: #0389a0;
+  color: #0389a0;
+}
+
+.table-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.table-pagination-btn:focus {
+  outline: 2px solid #0389a0;
+  outline-offset: 2px;
+}
+
+.table-pagination-pages {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0 0.5rem;
+}
+
+.table-pagination-page {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.875rem;
+  color: #3f4242;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    color 0.2s;
+}
+
+.table-pagination-page:hover {
+  border-color: #0389a0;
+  color: #0389a0;
+}
+
+.table-pagination-page--active {
+  background: #0389a0;
+  border-color: #0389a0;
+  color: #fff;
+}
+
+.table-pagination-page--active:hover {
+  background: #027a8f;
+  border-color: #027a8f;
+  color: #fff;
+}
+
+.table-pagination-page:focus {
+  outline: 2px solid #0389a0;
+  outline-offset: 2px;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+
+/* Mobile (<480px): table fills available space, no rounded corners */
+@media (max-width: 479px) {
+  .table-wrapper {
+    border-radius: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .table-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .table-loading {
+    min-height: 120px;
+    padding: 1rem;
+  }
+
+  .table-empty {
+    padding: 1.5rem 1rem;
+  }
+
+  .table {
+    min-width: 560px;
+  }
+
+  .table-bulk-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .table-pagination {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .table-pagination-pages {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 0.25rem;
+  }
+
+  .table-pagination-btn,
+  .table-pagination-page {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Tablet (480–767px) */
+@media (min-width: 480px) and (max-width: 767px) {
+  .table {
+    min-width: 600px;
+  }
+
+  .table-pagination-pages {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .table-pagination-page {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Tablet landscape+ */
+@media (min-width: 768px) {
+  .table {
+    min-width: 700px;
+  }
+}
+
+/* Wide desktop */
+@media (min-width: 1200px) {
+  .table {
+    min-width: 960px;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1440px) {
+  .table th,
+  .table td {
+    padding: 0.875rem 1.25rem;
+  }
+}
