@@ -4,6 +4,7 @@ import {
   MoreVertical,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
 } from 'lucide-react';
 import './Table.css';
 
@@ -248,9 +249,20 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                   </td>
                   <td className='table-cell'>
                     <span
-                      className={`table-status ${STATUS_COLORS[row.currentStatus] || ''}`}
+                      className={`table-status table-status-pill ${
+                        STATUS_COLORS[row.currentStatus] || ''
+                      }`}
+                      aria-label={`${row.currentStatus} status`}
                     >
-                      {row.currentStatus}
+                      <span className='table-status-text'>
+                        {row.currentStatus}
+                      </span>
+                      <ChevronDown
+                        size={14}
+                        strokeWidth={2}
+                        aria-hidden
+                        className='table-status-icon'
+                      />
                     </span>
                   </td>
                   <td className='table-cell'>{formatDate(row.date)}</td>
