@@ -1,10 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Search from './components/Search/Search';
 import Filters from './components/Filters/Filters';
 import Table from './components/Table/Table';
 import Profile from './components/Profile/Profile';
 import { getData, getApplicantProfile } from './api/mockApi';
 import './App.css';
+
+function filterRows(allRows, searchValue, filters) {
+  let rows = [...allRows];
+
+  const search = (searchValue || '').trim().toLowerCase();
+  if (search) {
+    rows = rows.filter(
+      (row) =>
+        row.businessName.toLowerCase().includes(search) ||
+        row.application.toLowerCase().includes(search) ||
+        row.tag.some((t) => t.toLowerCase().includes(search)),
+    );
+  }
+
+  if (filters.application) {
+    rows = rows.filter((row) => row.application === filters.application);
+  }
+
+  if (filters.status && filters.status.length > 0) {
+    const set = new Set(filters.status);
+    rows = rows.filter((row) => set.has(row.currentStatus));
+  }
+
+  if (filters.payment && filters.payment.length > 0) {
+    const set = new Set(filters.payment);
+    rows = rows.filter((row) => set.has(row.payment));
+  }
+
+  return rows;
+}
 
 function App() {
   const [searchValue, setSearchValue] = useState('');
@@ -13,32 +43,30 @@ function App() {
     status: [],
     payment: [],
   });
-  const [rows, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [allRows, setAllRows] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [applicationOptions, setApplicationOptions] = useState([]);
   const [selectedApplicant, setSelectedApplicant] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
-    queueMicrotask(() => setLoading(true));
-    getData(searchValue, filters).then((data) => {
+    getData('', {}).then((data) => {
       if (cancelled) return;
-      setRows(data);
+      setAllRows(data);
+      setApplicationOptions(
+        [...new Set(data.map((r) => r.application).filter(Boolean))].sort(),
+      );
       setLoading(false);
-      if (
-        !filters.application &&
-        filters.status.length === 0 &&
-        filters.payment.length === 0
-      ) {
-        setApplicationOptions(
-          [...new Set(data.map((r) => r.application).filter(Boolean))].sort(),
-        );
-      }
     });
     return () => {
       cancelled = true;
     };
-  }, [searchValue, filters]);
+  }, []);
+
+  const rows = useMemo(
+    () => filterRows(allRows, searchValue, filters),
+    [allRows, searchValue, filters],
+  );
 
   const handleViewApplicant = async (row) => {
     const { ok, row: profile } = await getApplicantProfile(row.businessName);
