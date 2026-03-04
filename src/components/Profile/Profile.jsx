@@ -154,14 +154,6 @@ function Profile({ applicant, onBack }) {
 
       {/* Sticky actions on mobile */}
       <div className="profile-sticky-actions" aria-label="Profile actions">
-        <button
-          type="button"
-          className="profile-btn profile-btn--ghost"
-          onClick={onBack}
-          aria-label="Back to applications"
-        >
-          <ArrowLeft size={16} aria-hidden /> Back
-        </button>
         <a
           className="profile-btn profile-btn--primary"
           href={`mailto:${email}`}

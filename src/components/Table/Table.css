@@ -222,6 +222,8 @@
   border-bottom: 1px solid #e5e7eb;
   vertical-align: middle;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .table th {
