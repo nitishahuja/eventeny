@@ -206,7 +206,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                       />
                     </label>
                   </td>
-                  <td className='table-cell'>
+                  <td className='table-cell table-cell--business'>
                     <div className='table-business'>
                       <img
                         src='/business-logo-placeholder.png'
@@ -215,7 +215,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                         width={32}
                         height={32}
                       />
-                      <div>
+                      <div className='table-business-text'>
                         <span
                           className='table-business-name'
                           onClick={() => onViewApplicant?.(row)}
@@ -245,8 +245,10 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                       ))}
                     </div>
                   </td>
-                  <td className='table-cell'>
-                    <span className='table-link'>{row.application}</span>
+                  <td className='table-cell table-cell--application'>
+                    <span className='table-link table-link--application'>
+                      {row.application}
+                    </span>
                   </td>
                   <td className='table-cell'>
                     {row.payment === 'paid' ? 'Paid' : 'Not Paid'}

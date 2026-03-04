@@ -247,6 +247,14 @@
   padding-right: 0.5rem;
 }
 
+.table-cell--business {
+  max-width: 260px;
+}
+
+.table-cell--application {
+  max-width: 220px;
+}
+
 .table-checkbox {
   width: 1rem;
   height: 1rem;
@@ -293,6 +301,11 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
+}
+
+.table-business-text {
+  min-width: 0;
 }
 
 .table-business-avatar {
@@ -310,6 +323,9 @@
   font-weight: 500;
   color: #0389a0;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .table-business-applicant {
@@ -340,6 +356,14 @@
 .table-link {
   color: #0389a0;
   font-weight: 500;
+}
+
+.table-link--application {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .table-status {
