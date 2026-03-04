@@ -152,7 +152,7 @@ function FiltersDropdown({ filters = {}, onChange, applications = [] }) {
   );
 
   return (
-    <div className={`filters-wrapper${isOpen ? ' filters-wrapper--open' : ''}`}>
+    <div className='filters-wrapper'>
       <button
         ref={triggerRef}
         type='button'

@@ -5,12 +5,7 @@ import './Search.css';
 const PLACEHOLDER = 'Search by business, name, tag, etc';
 const DEBOUNCE_MS = 300;
 
-function Search({
-  value = '',
-  onChange,
-  showEmptyState = false,
-  emptyStateMessage = 'No results found.',
-}) {
+function Search({ value = '', onChange }) {
   const [localValue, setLocalValue] = useState(value);
   const debounceRef = useRef(null);
 
@@ -67,8 +62,6 @@ function Search({
           placeholder={PLACEHOLDER}
           autoComplete='off'
           aria-label='Search by business, name, tag, or application'
-          aria-describedby={showEmptyState ? 'search-empty-state' : undefined}
-          aria-invalid={showEmptyState ? 'true' : undefined}
         />
         <button
           type='button'
@@ -81,11 +74,6 @@ function Search({
           <X size={18} strokeWidth={2} aria-hidden />
         </button>
       </div>
-      {showEmptyState && (
-        <p id='search-empty-state' className='search-empty-state' role='status'>
-          {emptyStateMessage}
-        </p>
-      )}
     </div>
   );
 }
