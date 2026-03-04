@@ -107,6 +107,7 @@ function App() {
             </header>
             <main id='main-content' className='app-main' tabIndex={-1}>
               <Table
+                key={`${searchValue}|${filters.application}|${filters.status.join(',')}|${filters.payment.join(',')}`}
                 rows={rows}
                 loading={loading}
                 onViewApplicant={handleViewApplicant}

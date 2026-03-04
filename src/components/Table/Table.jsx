@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo } from 'react';
 import {
   ChevronsUpDown,
   MoreVertical,
@@ -454,4 +454,4 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
   );
 }
 
-export default Table;
+export default memo(Table);
