@@ -5,11 +5,72 @@
 }
 
 :root {
+  /* Typography */
   --font-primary:
     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Core colors */
   --color-text: #213547;
+  --color-text-muted: #3f4242;
+  --color-text-secondary: #5e6463;
+  --color-text-placeholder: #9daaa5;
+  --color-text-dark: #111827;
   --color-bg: #fff;
+  --color-bg-hover: #f9fafb;
+  --color-bg-subtle: #fafafa;
+  --color-bg-muted: #f3f4f6;
+
+  /* Accent */
   --color-accent: #0389a0;
+  --color-accent-strong: #038580;
+  --color-accent-tint: rgba(3, 137, 160, 0.08);
+  --color-accent-tint-light: rgba(3, 137, 160, 0.06);
+  --color-accent-tint-hover: rgba(3, 137, 160, 0.1);
+  --color-accent-tint-focus: rgba(3, 137, 160, 0.12);
+
+  /* Borders */
+  --color-border: #9da6a5;
+  --color-border-muted: #9daaa5;
+  --color-border-light: #e5e7eb;
+  --color-border-medium: #d1d5db;
+  --color-border-avatar: #c4cac9;
+
+  /* Status colors */
+  --color-status-awaiting-bg: #fef5db;
+  --color-status-awaiting-text: #92400e;
+  --color-status-approved-bg: #d3e7dc;
+  --color-status-approved-text: #065f46;
+  --color-status-waitlisted-bg: #d3e4f4;
+  --color-status-waitlisted-text: #1e40af;
+  --color-status-rejected-bg: #f7d7dc;
+  --color-status-rejected-text: #991b1b;
+  --color-status-withdrawn-bg: #f3f4f6;
+  --color-status-withdrawn-text: #4b5563;
+
+  /* UI grays */
+  --color-icon: #3f4242;
+  --color-icon-muted: #6b7280;
+  --color-muted-hover: rgba(157, 170, 165, 0.12);
+  --color-overlay-bg: rgba(63, 66, 66, 0.06);
+  --color-backdrop: rgba(0, 0, 0, 0.3);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 -4px 24px rgba(0, 0, 0, 0.12);
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-pill: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.2s;
 
   font-family: var(--font-primary);
   line-height: 1.5;
@@ -57,7 +118,7 @@ body {
   min-width: 0;
   max-width: 100%;
   min-height: 100vh;
-  background-color: #fff;
+  background-color: var(--color-bg);
   overflow-x: clip;
   overscroll-behavior-x: contain;
   touch-action: pan-y;
@@ -98,9 +159,4 @@ button {
 
 button:hover {
   border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }

@@ -4,8 +4,8 @@
   left: 0.5rem;
   z-index: 100;
   padding: 0.125rem 0.5rem;
-  background: rgba(3, 137, 160, 0.08);
-  color: #213547;
+  background: var(--color-accent-tint);
+  color: var(--color-text);
   font-size: 0.75rem;
   font-weight: 400;
   text-decoration: none;
@@ -15,7 +15,7 @@
 
 .skip-link:focus {
   top: 0.5rem;
-  outline: 1px solid var(--color-accent, #0389a0);
+  outline: 1px solid var(--color-accent);
   outline-offset: 1px;
 }
 
@@ -39,7 +39,7 @@
   min-width: 0;
   padding: 0.75rem;
   padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
-  background-color: #fff;
+  background-color: var(--color-bg);
   overflow-x: clip;
 }
 

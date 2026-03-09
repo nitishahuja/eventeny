@@ -99,10 +99,9 @@ function App() {
             >
               <Search value={searchValue} onChange={setSearchValue} />
               <Filters
-                rows={rows}
                 filters={filters}
                 onChange={setFilters}
-                applicationOptions={applicationOptions}
+                applications={applicationOptions}
               />
             </header>
             <main id='main-content' className='app-main' tabIndex={-1}>

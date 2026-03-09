@@ -1,8 +1,3 @@
-/**
- * Mock API: returns rows filtered by search and filters.
- * Row shape: { businessName, tag, application, payment, currentStatus, date }
- */
-
 const MOCK_ROWS = [
   {
     businessName: 'Acme Events Co',
@@ -164,101 +159,113 @@ const MOCK_ROWS = [
     currentStatus: 'Waitlisted',
     date: '2025-02-16',
   },
-]
+];
+
+/** Extra profile fields keyed by businessName */
+const PROFILE_EXTRAS = {
+  'Acme Events Co': {
+    email: 'contact@acmeevents.com',
+    phone: '+1 (415) 555-0139',
+    website: 'https://acmeevents.com',
+    address: '88 Townsend St, San Francisco, CA',
+    country: 'United States',
+    description:
+      'Acme Events Co provides full-service food concessions for large outdoor events with a focus on sustainable packaging and fast throughput.',
+    documents: [
+      { name: 'Insurance Certificate.pdf', type: 'Insurance', url: '#' },
+      { name: 'Health Permit.pdf', type: 'Permit', url: '#' },
+    ],
+  },
+  'Green Catering': {
+    email: 'hello@greencatering.io',
+    phone: '+1 (206) 555-0171',
+    website: 'https://greencatering.io',
+    address: '424 Pine St, Seattle, WA',
+    country: 'United States',
+    description:
+      'Farm-to-table catering specializing in vegetarian and vegan menus. Experienced with VIP backstage service and high-volume booths.',
+    documents: [{ name: 'Menu & Allergen List.pdf', type: 'Menu', url: '#' }],
+  },
+  'Tech Expo Inc': {
+    email: 'info@techexpo.example',
+    phone: '+1 (312) 555-0198',
+    website: 'https://techexpo.example',
+    address: '100 W Randolph St, Chicago, IL',
+    country: 'United States',
+    description:
+      'Technical production partner providing staging, AV, and exhibitor support for indoor/outdoor expos.',
+    documents: [],
+  },
+};
+
+// -----------------------------------------------------------------------------
+// Filter helpers (pure)
+// -----------------------------------------------------------------------------
+
+function matchSearch(row, search) {
+  if (!search) return true;
+  const q = search.trim().toLowerCase();
+  return (
+    row.businessName.toLowerCase().includes(q) ||
+    row.application.toLowerCase().includes(q) ||
+    row.tag.some((t) => t.toLowerCase().includes(q))
+  );
+}
+
+function applyFilters(rows, searchValue, filters) {
+  let result = rows;
+  const search = (searchValue || '').trim().toLowerCase();
+
+  result = result.filter((row) => matchSearch(row, search));
+
+  if (filters.application) {
+    result = result.filter((row) => row.application === filters.application);
+  }
+  if (filters.status?.length) {
+    const statusSet = new Set(filters.status);
+    result = result.filter((row) => statusSet.has(row.currentStatus));
+  }
+  if (filters.payment?.length) {
+    const paymentSet = new Set(filters.payment);
+    result = result.filter((row) => paymentSet.has(row.payment));
+  }
+
+  return result;
+}
+
+const MOCK_DELAY_MS = 300;
+const PROFILE_DELAY_MS = 200;
 
 /**
- * @param {string} searchValue - Search in businessName and application
- * @param {Object} filters - Optional: { application?: string, status?: string[], payment?: string[] }
- * @returns {Promise<Array>} Rows matching search and filters
+ * Returns rows filtered by search and filters.
+ * @param {string} [searchValue=''] - Search in businessName, application, and tags
+ * @param {Object} [filters={}] - { application?: string, status?: string[], payment?: string[] }
+ * @returns {Promise<Array>} Matching rows
  */
 export function getData(searchValue = '', filters = {}) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      let rows = [...MOCK_ROWS]
-
-      const search = (searchValue || '').trim().toLowerCase()
-      if (search) {
-        rows = rows.filter(
-          (row) =>
-            row.businessName.toLowerCase().includes(search) ||
-            row.application.toLowerCase().includes(search) ||
-            row.tag.some((t) => t.toLowerCase().includes(search))
-        )
-      }
-
-      if (filters.application) {
-        rows = rows.filter((row) => row.application === filters.application)
-      }
-      if (filters.status && filters.status.length > 0) {
-        const set = new Set(filters.status)
-        rows = rows.filter((row) => set.has(row.currentStatus))
-      }
-      if (filters.payment && filters.payment.length > 0) {
-        const set = new Set(filters.payment)
-        rows = rows.filter((row) => set.has(row.payment))
-      }
-
-      resolve(rows)
-    }, 300)
-  })
+      const rows = applyFilters([...MOCK_ROWS], searchValue, filters);
+      resolve(rows);
+    }, MOCK_DELAY_MS);
+  });
 }
 
 /**
- * Mock update: mutate in-memory row status and return updated row
+ * Returns a single applicant profile by businessName, with optional extra fields.
  * @param {string} businessName
- * @param {string} newStatus - one of: 'Approved', 'Rejected', 'Waitlisted', 'Withdrawn', 'Awaiting decision'
- * @returns {Promise<{ok: boolean, row: any}>}
- */
-
-/**
- * Mock profile fetch: returns a single applicant by businessName
- * @param {string} businessName
- * @returns {Promise<{ok: boolean, row: any}>}
+ * @returns {Promise<{ ok: boolean, row: object | null }>}
  */
 export function getApplicantProfile(businessName) {
   return new Promise((resolve) => {
     setTimeout(() => {
       const row = MOCK_ROWS.find((r) => r.businessName === businessName);
-      // Enriched mock profile details by businessName
-      const EXTRAS = {
-        'Acme Events Co': {
-          email: 'contact@acmeevents.com',
-          phone: '+1 (415) 555-0139',
-          website: 'https://acmeevents.com',
-          address: '88 Townsend St, San Francisco, CA',
-          country: 'United States',
-          description:
-            'Acme Events Co provides full-service food concessions for large outdoor events with a focus on sustainable packaging and fast throughput.',
-          documents: [
-            { name: 'Insurance Certificate.pdf', type: 'Insurance', url: '#' },
-            { name: 'Health Permit.pdf', type: 'Permit', url: '#' },
-          ],
-        },
-        'Green Catering': {
-          email: 'hello@greencatering.io',
-          phone: '+1 (206) 555-0171',
-          website: 'https://greencatering.io',
-          address: '424 Pine St, Seattle, WA',
-          country: 'United States',
-          description:
-            'Farm-to-table catering specializing in vegetarian and vegan menus. Experienced with VIP backstage service and high-volume booths.',
-          documents: [
-            { name: 'Menu & Allergen List.pdf', type: 'Menu', url: '#' },
-          ],
-        },
-        'Tech Expo Inc': {
-          email: 'info@techexpo.example',
-          phone: '+1 (312) 555-0198',
-          website: 'https://techexpo.example',
-          address: '100 W Randolph St, Chicago, IL',
-          country: 'United States',
-          description:
-            'Technical production partner providing staging, AV, and exhibitor support for indoor/outdoor expos.',
-          documents: [],
-        },
-      };
-      if (row) resolve({ ok: true, row: { ...row, ...(EXTRAS[row.businessName] || {}) } });
-      else resolve({ ok: false, row: null });
-    }, 200);
+      if (!row) {
+        resolve({ ok: false, row: null });
+        return;
+      }
+      const extras = PROFILE_EXTRAS[row.businessName] || {};
+      resolve({ ok: true, row: { ...row, ...extras } });
+    }, PROFILE_DELAY_MS);
   });
 }

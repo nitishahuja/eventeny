@@ -1,6 +1,6 @@
 import { useState, useMemo, memo } from 'react';
 import {
-  ChevronsUpDown,
+  ArrowUpDown,
   MoreVertical,
   ChevronLeft,
   ChevronRight,
@@ -163,7 +163,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                   aria-label={`Sort by Business name ${sortDir === 'asc' ? 'ascending' : 'descending'}`}
                 >
                   Business name
-                  <ChevronsUpDown size={16} strokeWidth={2} aria-hidden />
+                  <ArrowUpDown size={16} strokeWidth={2} aria-hidden />
                 </button>
               </th>
               <th scope='col' className='table-cell'>
@@ -309,7 +309,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
             aria-label={`Sort by Business name ${sortDir === 'asc' ? 'ascending' : 'descending'}`}
           >
             Business name
-            <ChevronsUpDown size={16} strokeWidth={2} aria-hidden />
+            <ArrowUpDown size={16} strokeWidth={2} aria-hidden />
           </button>
         </div>
         <div className='table-cards-list' role='list' aria-label='Applications'>

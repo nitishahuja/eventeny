@@ -8,23 +8,31 @@
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   min-height: 44px;
-  background-color: #fff;
-  border: 2px solid #9daaa5;
-  border-radius: 9999px;
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-border-muted);
+  border-radius: var(--radius-pill);
   font-family: inherit;
   font-size: 1rem;
-  color: #213547;
+  color: var(--color-text);
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: border-color var(--transition-fast);
 }
 
 .filters-trigger:hover {
-  border-color: #3f4242;
+  border-color: var(--color-text-muted);
 }
 
 .filters-trigger:focus {
   outline: none;
-  border-color: #0389a0;
+  border-color: var(--color-accent);
+}
+
+.filters-trigger--active {
+  border-color: var(--color-accent);
+}
+
+.filters-trigger--active .filters-chevron {
+  transform: rotate(180deg);
 }
 
 .filters-icon,
@@ -33,7 +41,11 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #3f4242;
+  color: var(--color-icon);
+}
+
+.filters-chevron {
+  transition: transform var(--transition-fast);
 }
 
 .filters-label {
@@ -48,11 +60,10 @@
   z-index: 50;
   min-width: 320px;
   max-width: 360px;
-  background: #fff;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  /* No overflow: hidden — it would clip .filters-panel-inner's scrollbar */
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .filters-panel-inner {
@@ -74,7 +85,7 @@
   margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #3f4242;
+  color: var(--color-text-muted);
 }
 
 .filters-checkbox-grid {
@@ -89,7 +100,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9375rem;
-  color: #213547;
+  color: var(--color-text);
   cursor: pointer;
 }
 
@@ -97,7 +108,7 @@
   width: 1rem;
   height: 1rem;
   margin: 0;
-  accent-color: #0389a0;
+  accent-color: var(--color-accent);
   cursor: pointer;
 }
 
@@ -107,7 +118,7 @@
     position: fixed;
     inset: 0;
     z-index: 49;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--color-backdrop);
     cursor: pointer;
   }
 
@@ -128,7 +139,7 @@
     border-radius: 16px 16px 0 0;
     border: none;
     border-bottom: none;
-    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-xl);
   }
 
   .filters-panel--bottom-sheet::before {
@@ -137,7 +148,7 @@
     flex-shrink: 0;
     width: 36px;
     height: 4px;
-    background: #d1d5db;
+    background: var(--color-border-medium);
     border-radius: 9999px;
     margin: 0.75rem auto 0;
   }
