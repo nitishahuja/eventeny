@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Search from './components/Search/Search';
 import Filters from './components/Filters/Filters';
 import Table from './components/Table/Table';
@@ -74,8 +74,11 @@ function App() {
   };
 
   const handleBackToList = () => setSelectedApplicant(null);
+  const mainRef = useRef(null);
 
-  // Read-only profile — no status update actions
+  useEffect(() => {
+    mainRef.current?.focus();
+  }, [selectedApplicant]);
 
   return (
     <>
@@ -104,7 +107,12 @@ function App() {
                 applications={applicationOptions}
               />
             </header>
-            <main id='main-content' className='app-main' tabIndex={-1}>
+            <main
+              id='main-content'
+              ref={mainRef}
+              className='app-main'
+              tabIndex={-1}
+            >
               <Table
                 key={`${searchValue}|${filters.application}|${filters.status.join(',')}|${filters.payment.join(',')}`}
                 rows={rows}
@@ -114,7 +122,12 @@ function App() {
             </main>
           </>
         ) : (
-          <main id='main-content' className='app-main' tabIndex={-1}>
+          <main
+            id='main-content'
+            ref={mainRef}
+            className='app-main'
+            tabIndex={-1}
+          >
             <Profile applicant={selectedApplicant} onBack={handleBackToList} />
           </main>
         )}

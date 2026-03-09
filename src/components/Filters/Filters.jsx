@@ -53,6 +53,20 @@ function Filters({ filters = {}, onChange, applications = [] }) {
     };
   }, [isOpen, close]);
 
+  // Focus management: move focus into panel when open, return to trigger when closed
+  useEffect(() => {
+    if (!isOpen) return;
+    const trigger = triggerRef.current;
+    const panel = panelRef.current;
+    const focusable = panel?.querySelector(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+    focusable?.focus();
+    return () => {
+      trigger?.focus();
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     if (isOpen && isMobile) {
       document.body.style.overflow = 'hidden';
@@ -88,6 +102,7 @@ function Filters({ filters = {}, onChange, applications = [] }) {
         isMobile ? ' filters-panel--bottom-sheet' : ''
       }`}
       role='dialog'
+      aria-modal={isMobile}
       aria-label='Filter options'
     >
       <div className='filters-panel-inner'>

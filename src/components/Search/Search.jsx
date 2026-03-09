@@ -61,7 +61,6 @@ function Search({ value = '', onChange }) {
           onChange={handleChange}
           placeholder={PLACEHOLDER}
           autoComplete='off'
-          aria-label='Search by business, name, tag, or application'
         />
         <button
           type='button'

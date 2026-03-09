@@ -113,7 +113,7 @@ function Profile({ applicant, onBack }) {
             {applicant.website && (
               <li>
                 <Globe size={16} aria-hidden />
-                <a className="profile-link" href={applicant.website} target="_blank" rel="noreferrer">{applicant.website.replace(/^https?:\/\//, '')}</a>
+                <a className="profile-link" href={applicant.website} target="_blank" rel="noopener noreferrer" aria-label={`${applicant.website.replace(/^https?:\/\//, '')} (opens in new tab)`}>{applicant.website.replace(/^https?:\/\//, '')}</a>
               </li>
             )}
           </ul>
@@ -153,7 +153,7 @@ function Profile({ applicant, onBack }) {
       </div>
 
       {/* Sticky actions on mobile */}
-      <div className="profile-sticky-actions" aria-label="Profile actions">
+      <div className="profile-sticky-actions" role="group" aria-label="Profile actions">
         <a
           className="profile-btn profile-btn--primary"
           href={`mailto:${email}`}

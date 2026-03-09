@@ -103,7 +103,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
         role='region'
         aria-label='Applications table'
       >
-        <div className='table-empty' role='status'>
+        <div className='table-empty' role='status' aria-live='polite'>
           <p>No applications found.</p>
           <p className='table-empty-hint'>
             Try adjusting your search or filters.
@@ -113,12 +113,18 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
     );
   }
 
+  const start = (page - 1) * ROWS_PER_PAGE + 1;
+  const end = Math.min(page * ROWS_PER_PAGE, sortedRows.length);
+
   return (
     <div
       className='table-wrapper'
       role='region'
       aria-label='Applications table'
     >
+      <span className='sr-only' aria-live='polite'>
+        Showing {start} to {end} of {sortedRows.length} applications
+      </span>
       {someSelected && (
         <div
           className='table-bulk-bar'
