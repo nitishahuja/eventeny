@@ -18,16 +18,24 @@
   transition: border-color var(--transition-fast);
 }
 
-.filters-trigger:hover {
+.filters-trigger:hover:not(.filters-trigger--active) {
   border-color: var(--color-text-muted);
 }
 
 .filters-trigger:focus {
   outline: none;
-  border-color: var(--color-accent);
+}
+
+.filters-trigger:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .filters-trigger--active {
+  border-color: var(--color-accent);
+}
+
+.filters-trigger--active:hover {
   border-color: var(--color-accent);
 }
 
