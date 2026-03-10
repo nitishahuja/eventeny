@@ -58,25 +58,27 @@ function SelectDropdown({
             role='listbox'
             aria-label={ariaLabel}
           >
-            <li role='option' aria-selected={!value}>
-              <button
-                type='button'
-                className={`select-dropdown-option ${
-                  !value ? 'select-dropdown-option--selected' : ''
-                }`}
-                onClick={() => handleSelect('')}
-              >
-                <span>{placeholder}</span>
-                {!value && (
-                  <Check
-                    size={16}
-                    strokeWidth={2}
-                    className='select-dropdown-check'
-                    aria-hidden
-                  />
-                )}
-              </button>
-            </li>
+            {!!placeholder && (
+              <li role='option' aria-selected={!value}>
+                <button
+                  type='button'
+                  className={`select-dropdown-option ${
+                    !value ? 'select-dropdown-option--selected' : ''
+                  }`}
+                  onClick={() => handleSelect('')}
+                >
+                  <span>{placeholder}</span>
+                  {!value && (
+                    <Check
+                      size={16}
+                      strokeWidth={2}
+                      className='select-dropdown-check'
+                      aria-hidden
+                    />
+                  )}
+                </button>
+              </li>
+            )}
             {options.map((opt) => (
               <li key={opt} role='option' aria-selected={value === opt}>
                 <button

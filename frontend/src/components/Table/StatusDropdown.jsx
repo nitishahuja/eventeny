@@ -18,7 +18,6 @@ export default function StatusDropdown({ value, onChange }) {
       value={value}
       options={STATUS_OPTIONS}
       onChange={onChange}
-      placeholder='Change status'
       ariaLabel={`${value} status`}
       className='status-dropdown'
       triggerClassName={`table-status table-status-pill ${colorClass}`}

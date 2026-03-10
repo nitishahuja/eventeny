@@ -24,7 +24,6 @@ export default function BulkActionsBar({
               'Rejected',
             ]}
             onChange={onBulkStatusChange}
-            placeholder='Change status'
             ariaLabel='Bulk status'
           />
           <button
