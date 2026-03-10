@@ -4,10 +4,10 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_DIR = path.join(__dirname, '../data');
+
+const DATA_DIR = path.join(__dirname, '../../data');
 const DATA_FILE = path.join(DATA_DIR, 'applications.json');
 
-// Base seed used when no persisted file exists yet
 const SEED_ROWS = [
   {
     businessName: 'Acme Events Co',
@@ -171,67 +171,57 @@ const SEED_ROWS = [
   },
 ];
 
-// Initialize rows from disk if available; otherwise seed and persist
-export let MOCK_ROWS = SEED_ROWS;
+let rows = [];
 
-try {
-  if (fs.existsSync(DATA_FILE)) {
-    const raw = fs.readFileSync(DATA_FILE, 'utf8');
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) {
-      MOCK_ROWS = parsed;
+function tryLoadRowsFromDisk() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const raw = fs.readFileSync(DATA_FILE, 'utf8');
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
     }
-  } else {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-    fs.writeFileSync(DATA_FILE, JSON.stringify(MOCK_ROWS, null, 2));
+  } catch (err) {
+    console.error('Failed to read applications.json:', err);
   }
-} catch (err) {
-  // If anything goes wrong, fall back to in-memory seed data
-  console.error('Failed to initialize MOCK_ROWS from disk:', err);
+  return null;
 }
 
-export const PROFILE_EXTRAS = {
-  'Acme Events Co': {
-    email: 'contact@acmeevents.com',
-    phone: '+1 (415) 555-0139',
-    website: 'https://acmeevents.com',
-    address: '88 Townsend St, San Francisco, CA',
-    country: 'United States',
-    description:
-      'Acme Events Co provides full-service food concessions for large outdoor events with a focus on sustainable packaging and fast throughput.',
-    documents: [
-      { name: 'Insurance Certificate.pdf', type: 'Insurance', url: '#' },
-      { name: 'Health Permit.pdf', type: 'Permit', url: '#' },
-    ],
-  },
-  'Green Catering': {
-    email: 'hello@greencatering.io',
-    phone: '+1 (206) 555-0171',
-    website: 'https://greencatering.io',
-    address: '424 Pine St, Seattle, WA',
-    country: 'United States',
-    description:
-      'Farm-to-table catering specializing in vegetarian and vegan menus. Experienced with VIP backstage service and high-volume booths.',
-    documents: [{ name: 'Menu & Allergen List.pdf', type: 'Menu', url: '#' }],
-  },
-  'Tech Expo Inc': {
-    email: 'info@techexpo.example',
-    phone: '+1 (312) 555-0198',
-    website: 'https://techexpo.example',
-    address: '100 W Randolph St, Chicago, IL',
-    country: 'United States',
-    description:
-      'Technical production partner providing staging, AV, and exhibitor support for indoor/outdoor expos.',
-    documents: [],
-  },
-};
-
-export function persistRows() {
+function tryPersistRowsToDisk() {
   try {
     fs.mkdirSync(DATA_DIR, { recursive: true });
-    fs.writeFileSync(DATA_FILE, JSON.stringify(MOCK_ROWS, null, 2));
+    fs.writeFileSync(DATA_FILE, JSON.stringify(rows, null, 2));
   } catch (err) {
-    console.error('Failed to persist MOCK_ROWS to disk:', err);
+    console.error('Failed to persist applications.json:', err);
   }
+}
+
+function init() {
+  const loaded = tryLoadRowsFromDisk();
+  if (loaded) {
+    rows = loaded;
+    return;
+  }
+  rows = SEED_ROWS;
+  tryPersistRowsToDisk();
+}
+
+init();
+
+export function getAllApplications() {
+  return rows;
+}
+
+export function getApplicationByBusinessName(businessName) {
+  return rows.find((r) => r.businessName === businessName);
+}
+
+export function updateApplicationStatusByBusinessNames(businessNames, status) {
+  const set = new Set(businessNames);
+  rows.forEach((row) => {
+    if (set.has(row.businessName)) {
+      row.currentStatus = status;
+    }
+  });
+  tryPersistRowsToDisk();
 }
 

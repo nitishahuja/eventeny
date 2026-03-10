@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "scripts": {
     "dev": "node src/index.js",
-    "start": "node src/index.js",
+    "start": "node src/server.js",
     "build": "echo \"Backend has no build step\""
   },
   "dependencies": {
