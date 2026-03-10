@@ -18,10 +18,11 @@ export default function StatusDropdown({ value, onChange, onOpenChange }) {
       value={value}
       options={STATUS_OPTIONS}
       onChange={onChange}
-      onOpenChange={onOpenChange}
       ariaLabel={`${value} status`}
       className='status-dropdown'
       triggerClassName={`table-status table-status-pill ${colorClass}`}
+      onOpenChange={onOpenChange}
+      usePortal
     />
   );
 }

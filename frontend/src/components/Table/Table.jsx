@@ -19,7 +19,7 @@ function Table({
   const [page, setPage] = useState(1);
   const isMobile = useIsMobile();
   const [bulkStatus, setBulkStatus] = useState('Approved');
-   const [openStatusRowKey, setOpenStatusRowKey] = useState(null);
+  const [openStatusRowKey, setOpenStatusRowKey] = useState(null);
 
   const sortedRows = useMemo(() => {
     const arr = [...rows];

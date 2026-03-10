@@ -142,7 +142,9 @@ export default function DesktopTable({
                       onRowStatusChange?.(row.businessName, next)
                     }
                     onOpenChange={(open) =>
-                      onOpenStatusRowChange?.(open ? row.businessName : null)
+                      onOpenStatusRowChange?.(
+                        open ? row.businessName : null,
+                      )
                     }
                   />
                 </td>
