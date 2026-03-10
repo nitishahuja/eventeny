@@ -114,10 +114,7 @@ function Filters({ filters = {}, onChange, applications = [] }) {
           ariaLabel='Application'
         />
         <div className='filters-field'>
-          <h3
-            id='filters-status-heading'
-            className='filters-section-title'
-          >
+          <h3 id='filters-status-heading' className='filters-section-title'>
             Status
           </h3>
           <div
@@ -139,10 +136,7 @@ function Filters({ filters = {}, onChange, applications = [] }) {
           </div>
         </div>
         <div className='filters-field'>
-          <h3
-            id='filters-payment-heading'
-            className='filters-section-title'
-          >
+          <h3 id='filters-payment-heading' className='filters-section-title'>
             Payment status
           </h3>
           <div

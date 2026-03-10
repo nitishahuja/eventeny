@@ -137,8 +137,8 @@ img {
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
+  font-weight: 400;
+  color: var(--color-accent);
   text-decoration: inherit;
 }
 

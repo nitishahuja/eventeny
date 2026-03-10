@@ -147,24 +147,25 @@ function App() {
         </header>
         {!selectedApplicant ? (
           <>
-            <header
-              className='app-top'
-              role='search'
-              aria-label='Search and filter applications'
-            >
-              <Search value={searchValue} onChange={setSearchValue} />
-              <Filters
-                filters={filters}
-                onChange={setFilters}
-                applications={applicationOptions}
-              />
-            </header>
             <main
               id='main-content'
               ref={mainRef}
               className='app-main'
               tabIndex={-1}
             >
+              <header
+                className='app-top'
+                role='search'
+                aria-label='Search and filter applications'
+              >
+                <Search value={searchValue} onChange={setSearchValue} />
+                <Filters
+                  filters={filters}
+                  onChange={setFilters}
+                  applications={applicationOptions}
+                />
+              </header>
+
               {loadError && !loading && (
                 <div style={{ padding: '0.75rem' }}>
                   <button type='button' onClick={loadApplications}>

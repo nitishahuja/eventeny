@@ -14,11 +14,7 @@
   gap: 1rem;
   padding: 1rem;
   border-radius: var(--radius-2xl);
-  background: linear-gradient(
-    135deg,
-    var(--color-accent) 0%,
-    #6bd0dc 100%
-  );
+  background: linear-gradient(135deg, var(--color-accent) 0%, #6bd0dc 100%);
   color: var(--color-bg);
   overflow: hidden;
   text-align: left;

@@ -305,9 +305,6 @@
   background: var(--color-bg-hover);
 }
 
-/* Table stacking: allow an "open dropdown" row to appear above later rows.
-   Without this, table paint order can cause later rows to overlap the menu,
-   making options under the row unclickable. */
 .table tbody tr {
   position: relative;
   z-index: 0;
