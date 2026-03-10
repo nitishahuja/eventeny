@@ -310,7 +310,7 @@
   z-index: 0;
 }
 
-.table tbody tr:has(.select-dropdown-trigger[aria-expanded='true']) {
+.table tbody tr.table-row--open {
   z-index: 5;
 }
 

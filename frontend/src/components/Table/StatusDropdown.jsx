@@ -10,7 +10,7 @@ const STATUS_COLORS = {
 
 const STATUS_OPTIONS = Object.keys(STATUS_COLORS);
 
-export default function StatusDropdown({ value, onChange }) {
+export default function StatusDropdown({ value, onChange, onOpenChange }) {
   const colorClass = STATUS_COLORS[value] || '';
 
   return (
@@ -18,6 +18,7 @@ export default function StatusDropdown({ value, onChange }) {
       value={value}
       options={STATUS_OPTIONS}
       onChange={onChange}
+      onOpenChange={onOpenChange}
       ariaLabel={`${value} status`}
       className='status-dropdown'
       triggerClassName={`table-status table-status-pill ${colorClass}`}

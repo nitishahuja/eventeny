@@ -14,6 +14,8 @@ export default function DesktopTable({
   onToggleSelectRow,
   onViewApplicant,
   onRowStatusChange,
+  openStatusRowKey,
+  onOpenStatusRowChange,
 }) {
   return (
     <div className='table-desktop table-scroll'>
@@ -67,10 +69,13 @@ export default function DesktopTable({
           {pageRows.map((row, i) => {
             const globalIdx = (page - 1) * rowsPerPage + i;
             const isSelected = selected.has(globalIdx);
+            const isOpen = openStatusRowKey === row.businessName;
             return (
               <tr
                 key={`${row.businessName}-${row.date}-${i}`}
-                className={isSelected ? 'table-row--selected' : ''}
+                className={`${isSelected ? 'table-row--selected' : ''} ${
+                  isOpen ? 'table-row--open' : ''
+                }`}
               >
                 <td className='table-cell table-cell--check'>
                   <label className='table-check-label'>
@@ -135,6 +140,9 @@ export default function DesktopTable({
                     value={row.currentStatus}
                     onChange={(next) =>
                       onRowStatusChange?.(row.businessName, next)
+                    }
+                    onOpenChange={(open) =>
+                      onOpenStatusRowChange?.(open ? row.businessName : null)
                     }
                   />
                 </td>

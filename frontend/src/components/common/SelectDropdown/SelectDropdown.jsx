@@ -11,6 +11,7 @@ function SelectDropdown({
   className = '',
   triggerClassName = '',
   disabled = false,
+  onOpenChange,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapRef = useRef(null);
@@ -20,15 +21,17 @@ function SelectDropdown({
     const handleClickOutside = (e) => {
       if (wrapRef.current && !wrapRef.current.contains(e.target)) {
         setIsOpen(false);
+        onOpenChange?.(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen]);
+  }, [isOpen, onOpenChange]);
 
   const handleSelect = (val) => {
     onChange(val);
     setIsOpen(false);
+    onOpenChange?.(false);
   };
 
   return (
@@ -44,7 +47,11 @@ function SelectDropdown({
             disabled
               ? undefined
               : () => {
-                  setIsOpen((o) => !o);
+                  setIsOpen((o) => {
+                    const next = !o;
+                    onOpenChange?.(next);
+                    return next;
+                  });
                 }
           }
           disabled={disabled}
