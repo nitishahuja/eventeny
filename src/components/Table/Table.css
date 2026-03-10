@@ -130,14 +130,14 @@
     gap: 0.75rem;
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--color-border-light);
-    font-weight: 500;
+    font-weight: 400;
   }
 
   .table-cards-list {
     display: flex;
     flex-direction: column;
     gap: 0;
-    font-weight: lighter;
+    font-weight: 400;
   }
 
   .table-card {
@@ -183,7 +183,7 @@
 
   .table-card-label {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--color-text-placeholder);
     text-transform: uppercase;
     letter-spacing: 0.02em;
@@ -214,6 +214,7 @@
   border-collapse: collapse;
   table-layout: auto;
   font-size: 0.9375rem;
+  font-weight: 400;
   min-width: 600px;
 }
 
@@ -229,7 +230,7 @@
 }
 
 .table th {
-  font-weight: 500;
+  font-weight: 400;
   color: var(--color-text-muted);
   background: var(--color-bg);
 }
@@ -285,7 +286,7 @@
   border: none;
   background: none;
   font: inherit;
-  font-weight: 600;
+  font-weight: 400;
   color: inherit;
   cursor: pointer;
   transition: color 0.2s;
@@ -324,7 +325,7 @@
 
 .table-business-applicant {
   display: block;
-  font-weight: lighter;
+  font-weight: 400;
   color: var(--color-text-secondary);
 }
 
@@ -400,27 +401,22 @@
 
 .table-status--awaiting {
   background: var(--color-status-awaiting-bg);
-  color: var(--color-status-awaiting-text);
 }
 
 .table-status--approved {
   background: var(--color-status-approved-bg);
-  color: var(--color-status-approved-text);
 }
 
 .table-status--waitlisted {
   background: var(--color-status-waitlisted-bg);
-  color: var(--color-status-waitlisted-text);
 }
 
 .table-status--rejected {
   background: var(--color-status-rejected-bg);
-  color: var(--color-status-rejected-text);
 }
 
 .table-status--withdrawn {
   background: var(--color-status-withdrawn-bg);
-  color: var(--color-status-withdrawn-text);
 }
 
 .table-cell--action {
@@ -434,7 +430,7 @@
   padding: 0.25rem;
   border: none;
   background: none;
-  color: var(--color-icon-muted);
+  color: var(--color-accent);
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition:
@@ -443,7 +439,7 @@
 }
 
 .table-action-btn:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
   background: var(--color-accent-tint);
 }
 
@@ -634,6 +630,12 @@
   .table th:nth-child(5),
   .table td:nth-child(5) {
     display: none;
+  }
+
+  /* Hide Action header text only; action buttons remain visible */
+  .table th.table-cell--action {
+    font-size: 0;
+    line-height: 0;
   }
 
   .table-business-avatar {

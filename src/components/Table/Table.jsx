@@ -1,7 +1,7 @@
 import { useState, useMemo, memo } from 'react';
 import {
   ArrowUpDown,
-  MoreVertical,
+  Ellipsis,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
@@ -188,7 +188,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                 Date
               </th>
               <th scope='col' className='table-cell table-cell--action'>
-                <span className='sr-only'>Action</span>
+                Action
               </th>
             </tr>
           </thead>
@@ -285,7 +285,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                       aria-label={`Actions for ${row.businessName}`}
                       aria-haspopup='true'
                     >
-                      <MoreVertical size={18} strokeWidth={2} aria-hidden />
+                      <Ellipsis size={18} strokeWidth={2} aria-hidden />
                     </button>
                   </td>
                 </tr>
@@ -372,7 +372,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                     aria-label={`Actions for ${row.businessName}`}
                     aria-haspopup='true'
                   >
-                    <MoreVertical size={18} strokeWidth={2} aria-hidden />
+                    <Ellipsis size={18} strokeWidth={2} aria-hidden />
                   </button>
                 </div>
                 <div className='table-card-fields'>

@@ -32,7 +32,9 @@ const mockRows = [
 describe('Table', () => {
   it('shows loading state when loading is true', () => {
     render(<Table rows={[]} loading={true} />);
-    expect(screen.getByRole('region', { name: /applications table/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: /applications table/i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('status', { name: undefined })).toHaveTextContent(
       'Loading applications…',
     );
@@ -41,7 +43,9 @@ describe('Table', () => {
   it('shows empty state when rows is empty and not loading', () => {
     render(<Table rows={[]} loading={false} />);
     expect(screen.getByText('No applications found.')).toBeInTheDocument();
-    expect(screen.getByText(/try adjusting your search or filters/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/try adjusting your search or filters/i),
+    ).toBeInTheDocument();
   });
 
   it('renders table with rows', () => {
@@ -56,13 +60,27 @@ describe('Table', () => {
   it('renders column headers', () => {
     render(<Table rows={mockRows} />);
     const table = screen.getByRole('table', { name: /applications/i });
-    expect(within(table).getByRole('columnheader', { name: /select all rows/i })).toBeInTheDocument();
-    expect(within(table).getByRole('button', { name: /sort by business name/i })).toBeInTheDocument();
-    expect(within(table).getByRole('columnheader', { name: 'Tag' })).toBeInTheDocument();
-    expect(within(table).getByRole('columnheader', { name: 'Application' })).toBeInTheDocument();
-    expect(within(table).getByRole('columnheader', { name: 'Payment' })).toBeInTheDocument();
-    expect(within(table).getByRole('columnheader', { name: 'Status' })).toBeInTheDocument();
-    expect(within(table).getByRole('columnheader', { name: 'Date' })).toBeInTheDocument();
+    expect(
+      within(table).getByRole('columnheader', { name: /select all rows/i }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByRole('button', { name: /sort by business name/i }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByRole('columnheader', { name: 'Tag' }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByRole('columnheader', { name: 'Application' }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByRole('columnheader', { name: 'Payment' }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByRole('columnheader', { name: 'Status' }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByRole('columnheader', { name: 'Date' }),
+    ).toBeInTheDocument();
   });
 
   it('shows results count for screen readers', () => {
@@ -74,7 +92,9 @@ describe('Table', () => {
   it('sort button toggles aria-sort and re-sorts', () => {
     render(<Table rows={mockRows} />);
     const table = screen.getByRole('table', { name: /applications/i });
-    const sortBtn = within(table).getByRole('button', { name: /sort by business name/i });
+    const sortBtn = within(table).getByRole('button', {
+      name: /sort by business name/i,
+    });
 
     expect(sortBtn).toHaveAttribute('aria-sort', 'ascending');
     fireEvent.click(sortBtn);
@@ -90,49 +110,77 @@ describe('Table', () => {
 
   it('select all checkbox selects all rows on page', () => {
     render(<Table rows={mockRows} />);
-    const selectAll = screen.getAllByRole('checkbox', { name: /select all rows on this page/i })[0];
+    const selectAll = screen.getAllByRole('checkbox', {
+      name: /select all rows on this page/i,
+    })[0];
 
     fireEvent.click(selectAll);
     expect(selectAll).toBeChecked();
-    expect(screen.getAllByRole('checkbox', { name: /select acme corp/i })[0]).toBeChecked();
-    expect(screen.getAllByRole('checkbox', { name: /select beta inc/i })[0]).toBeChecked();
-    expect(screen.getAllByRole('checkbox', { name: /select gamma llc/i })[0]).toBeChecked();
+    expect(
+      screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
+    ).toBeChecked();
+    expect(
+      screen.getAllByRole('checkbox', { name: /select beta inc/i })[0],
+    ).toBeChecked();
+    expect(
+      screen.getAllByRole('checkbox', { name: /select gamma llc/i })[0],
+    ).toBeChecked();
   });
 
   it('select all checkbox deselects all when clicked again', () => {
     render(<Table rows={mockRows} />);
-    const selectAll = screen.getAllByRole('checkbox', { name: /select all rows on this page/i })[0];
+    const selectAll = screen.getAllByRole('checkbox', {
+      name: /select all rows on this page/i,
+    })[0];
 
     fireEvent.click(selectAll);
     fireEvent.click(selectAll);
     expect(selectAll).not.toBeChecked();
-    expect(screen.getAllByRole('checkbox', { name: /select acme corp/i })[0]).not.toBeChecked();
+    expect(
+      screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
+    ).not.toBeChecked();
   });
 
   it('row checkbox selects single row', () => {
     render(<Table rows={mockRows} />);
-    const acmeCheckboxes = screen.getAllByRole('checkbox', { name: /select acme corp/i });
+    const acmeCheckboxes = screen.getAllByRole('checkbox', {
+      name: /select acme corp/i,
+    });
     fireEvent.click(acmeCheckboxes[0]);
     expect(acmeCheckboxes[0]).toBeChecked();
   });
 
   it('shows bulk bar when rows are selected', () => {
     render(<Table rows={mockRows} />);
-    fireEvent.click(screen.getAllByRole('checkbox', { name: /select acme corp/i })[0]);
+    fireEvent.click(
+      screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
+    );
 
-    expect(screen.getByRole('toolbar', { name: /bulk actions/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('toolbar', { name: /bulk actions/i }),
+    ).toBeInTheDocument();
     expect(screen.getByText(/1 row selected/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /clear selection/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /clear selection/i }),
+    ).toBeInTheDocument();
   });
 
   it('clear selection button clears selection and hides bulk bar', () => {
     render(<Table rows={mockRows} />);
-    fireEvent.click(screen.getAllByRole('checkbox', { name: /select acme corp/i })[0]);
-    expect(screen.getByRole('toolbar', { name: /bulk actions/i })).toBeInTheDocument();
+    fireEvent.click(
+      screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
+    );
+    expect(
+      screen.getByRole('toolbar', { name: /bulk actions/i }),
+    ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /clear selection/i }));
-    expect(screen.queryByRole('toolbar', { name: /bulk actions/i })).not.toBeInTheDocument();
-    expect(screen.getAllByRole('checkbox', { name: /select acme corp/i })[0]).not.toBeChecked();
+    expect(
+      screen.queryByRole('toolbar', { name: /bulk actions/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
+    ).not.toBeChecked();
   });
 
   it('calls onViewApplicant when business name is clicked', () => {
@@ -158,15 +206,23 @@ describe('Table', () => {
 
   it('renders pagination', () => {
     render(<Table rows={mockRows} />);
-    expect(screen.getByRole('navigation', { name: /table pagination/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /previous page/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /next page/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('navigation', { name: /table pagination/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /previous page/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /next page/i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Page 1' })).toBeInTheDocument();
   });
 
   it('previous page button is disabled on first page', () => {
     render(<Table rows={mockRows} />);
-    expect(screen.getByRole('button', { name: /previous page/i })).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: /previous page/i }),
+    ).toBeDisabled();
   });
 
   it('next page button is disabled on last page when few rows', () => {
@@ -183,7 +239,9 @@ describe('Table', () => {
   it('displays status with accessible label', () => {
     render(<Table rows={mockRows} />);
     expect(screen.getAllByText('Approved').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByLabelText(/approved status/i).length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByLabelText(/approved status/i).length,
+    ).toBeGreaterThanOrEqual(1);
   });
 
   it('displays payment as Paid or Not Paid', () => {
@@ -194,7 +252,11 @@ describe('Table', () => {
 
   it('action button has aria-label per row', () => {
     render(<Table rows={mockRows} />);
-    expect(screen.getAllByRole('button', { name: /actions for acme corp/i }).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByRole('button', { name: /actions for beta inc/i }).length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByRole('button', { name: /actions for acme corp/i }).length,
+    ).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByRole('button', { name: /actions for beta inc/i }).length,
+    ).toBeGreaterThanOrEqual(1);
   });
 });

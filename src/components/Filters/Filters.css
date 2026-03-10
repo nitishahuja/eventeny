@@ -70,8 +70,9 @@
   max-width: 360px;
   background: var(--color-bg);
   border: 1px solid var(--color-border-medium);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0px 4px 16px 0px #22222233;
+  padding: 10px;
 }
 
 .filters-panel-inner {
