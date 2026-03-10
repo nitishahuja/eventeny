@@ -3,7 +3,13 @@ import Search from './components/Search/Search';
 import Filters from './components/Filters/Filters';
 import Table from './components/Table/Table';
 import Profile from './components/Profile/Profile';
-import { getData, getApplicantProfile, applyFilters } from './api/mockApi';
+import Toast from './components/common/Toast/Toast';
+import {
+  getData,
+  getApplicantProfile,
+  applyFilters,
+  bulkUpdateStatus,
+} from './api/mockApi';
 import './App.css';
 
 function App() {
@@ -18,6 +24,7 @@ function App() {
   const [applicationOptions, setApplicationOptions] = useState([]);
   const [selectedApplicant, setSelectedApplicant] = useState(null);
   const profileCacheRef = useRef(new Map());
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -60,6 +67,45 @@ function App() {
     mainRef.current?.focus();
   }, [selectedApplicant]);
 
+  const handleBulkStatusChange = async (businessNames, status) => {
+    if (!Array.isArray(businessNames) || !businessNames.length || !status) {
+      return;
+    }
+
+    // Persist to backend first; only update local state when it succeeds
+    try {
+      const result = await bulkUpdateStatus(businessNames, status);
+      if (!result?.ok) {
+        setToast({
+          message:
+            'Unable to update status for selected rows. Please try again.',
+          variant: 'error',
+        });
+        return;
+      }
+
+      setAllRows((prev) =>
+        prev.map((row) =>
+          businessNames.includes(row.businessName)
+            ? { ...row, currentStatus: status }
+            : row,
+        ),
+      );
+
+      setToast({
+        message: `Status updated to "${status}" for ${businessNames.length} selected ${
+          businessNames.length === 1 ? 'row' : 'rows'
+        }.`,
+        variant: 'success',
+      });
+    } catch {
+      setToast({
+        message: 'Unable to update status for selected rows. Please try again.',
+        variant: 'error',
+      });
+    }
+  };
+
   return (
     <>
       <a href='#main-content' className='skip-link'>
@@ -98,6 +144,7 @@ function App() {
                 rows={rows}
                 loading={loading}
                 onViewApplicant={handleViewApplicant}
+                onBulkStatusChange={handleBulkStatusChange}
               />
             </main>
           </>
@@ -112,6 +159,13 @@ function App() {
           </main>
         )}
       </div>
+      {toast && (
+        <Toast
+          message={toast.message}
+          variant={toast.variant}
+          onDismiss={() => setToast(null)}
+        />
+      )}
     </>
   );
 }

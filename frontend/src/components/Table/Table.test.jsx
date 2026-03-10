@@ -165,7 +165,7 @@ describe('Table', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows bulk status and message actions when rows are selected', () => {
+  it('shows bulk status actions when rows are selected', () => {
     render(<Table rows={mockRows} />);
     fireEvent.click(
       screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
@@ -179,12 +179,9 @@ describe('Table', () => {
     ).toBeInTheDocument();
   });
 
-  it('bulk actions trigger mocked behavior', () => {
-    // Some environments may not define window.alert; ensure it exists for the spy.
-    // eslint-disable-next-line no-global-assign
-    window.alert = window.alert || (() => {});
-    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
-    render(<Table rows={mockRows} />);
+  it('bulk actions call onBulkStatusChange with selected business names and status', () => {
+    const onBulkStatusChange = vi.fn();
+    render(<Table rows={mockRows} onBulkStatusChange={onBulkStatusChange} />);
 
     fireEvent.click(
       screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
@@ -192,8 +189,10 @@ describe('Table', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /apply/i }));
 
-    expect(alertSpy).toHaveBeenCalled();
-    alertSpy.mockRestore();
+    expect(onBulkStatusChange).toHaveBeenCalledTimes(1);
+    const [businessNames, status] = onBulkStatusChange.mock.calls[0];
+    expect(businessNames).toEqual(['Acme Corp']);
+    expect(status).toBe('Approved');
   });
 
   it('clear selection button clears selection and hides bulk bar', () => {

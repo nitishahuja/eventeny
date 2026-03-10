@@ -44,7 +44,9 @@ The goal was to translate a Figma design into **production-ready, accessible UI*
       - `Profile/`: applicant profile detail page (bonus feature).
       - `common/SelectDropdown/`: reusable select dropdown used by Filters (Application) and Table (bulk status + status pill styling).
     - `frontend/src/hooks/useIsMobile.js`: small hook around `matchMedia` for responsive behavior in JS (used in Filters + Table pagination).
-  - `backend/`: reserved for a future real API implementation (kept in the same git repo, not yet implemented).
+  - `backend/`: Node/Express API (kept in the same git repo as the frontend).
+    - `backend/src/mockData.js`: shared seed data and a simple file-backed store (`data/applications.json`) so status changes persist across refreshes and backend restarts (for this demo).
+    - `backend/src/index.js`: Express server with CORS, `/api/health`, `/api/applications`, `/api/profile/:businessName`, and `/api/applications/bulk-status` for bulk status updates.
 
 - **Component hierarchy (simplified)**
   - `App`
@@ -66,7 +68,8 @@ The goal was to translate a Figma design into **production-ready, accessible UI*
     - `Table`: sort direction, page, bulk selection; reset by remount when filters/search change (via `key` on `<Table />`).
     - `SelectDropdown`: open/close state and option selection.
   - **Data layer approach:**
-    - `getData()` returns the full dataset; **all filtering is done client-side** in `App` using `applyFilters`, to align with the “no backend required” constraint.
+    - `getData()` and `getApplicantProfile()` call the backend first (via `mockApi.js`), but fall back to local mock data if the API is unavailable.
+    - **All filtering is done client-side** in `App` using `applyFilters`, so the backend can remain simple and stateless from a querying perspective.
 
 - **Styling approach**
   - **CSS modules by feature folder** (plain CSS files colocated with components).
@@ -161,13 +164,20 @@ The goal was to translate a Figma design into **production-ready, accessible UI*
 
 ### Intentional functionality (experience improvement beyond the baseline spec)
 
-The assignment already required specific behaviors for **Search**, **Advanced filters**, and the **Interactive table**. Beyond those baseline requirements, I added one notable enhancement:
+The assignment already required specific behaviors for **Search**, **Advanced filters**, and the **Interactive table**. Beyond those baseline requirements, I added a few focused enhancements:
 
 - **Applicant Profile page**: a dedicated view with contextual details and actions for a selected vendor.
   - **Why:** In realistic workflows, organizers don’t just scan tables—they open a detailed view before deciding. Providing a dedicated profile:
     - Reduces context-switching (no need to cross-reference external tools).
     - Shows how the table integrates into a larger workflow.
     - Demonstrates that the table actions (e.g., “View applicant”) are wired into a real, navigable flow.
+
+- **Live backend + persistent bulk status updates**:
+  - Backend exposes `/api/applications/bulk-status`, and the frontend `Table` calls it via `bulkUpdateStatus` when bulk actions are applied.
+  - Updates are written back to `backend/data/applications.json`, so status changes survive page refreshes and backend restarts in this demo environment.
+
+- **Accessible toast notifications**:
+  - A shared `Toast` component (used by `App`) surfaces success and error states for bulk updates with `role="status" aria-live="polite"`, a dismiss button, and responsive placement (bottom on mobile, bottom-right on desktop).
 
 ---
 
@@ -177,6 +187,8 @@ From the repo root:
 
 ```bash
 npm install        # installs root dev scripts only
+cd backend
+npm install        # install backend dependencies
 cd frontend
 npm install        # install frontend dependencies
 npm run dev

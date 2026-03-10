@@ -1,4 +1,14 @@
-const MOCK_ROWS = [
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DATA_DIR = path.join(__dirname, '../data');
+const DATA_FILE = path.join(DATA_DIR, 'applications.json');
+
+// Base seed used when no persisted file exists yet
+const SEED_ROWS = [
   {
     businessName: 'Acme Events Co',
     tag: ['vendor', 'catering'],
@@ -161,8 +171,26 @@ const MOCK_ROWS = [
   },
 ];
 
-/** Extra profile fields keyed by businessName */
-const PROFILE_EXTRAS = {
+// Initialize rows from disk if available; otherwise seed and persist
+export let MOCK_ROWS = SEED_ROWS;
+
+try {
+  if (fs.existsSync(DATA_FILE)) {
+    const raw = fs.readFileSync(DATA_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      MOCK_ROWS = parsed;
+    }
+  } else {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(DATA_FILE, JSON.stringify(MOCK_ROWS, null, 2));
+  }
+} catch (err) {
+  // If anything goes wrong, fall back to in-memory seed data
+  console.error('Failed to initialize MOCK_ROWS from disk:', err);
+}
+
+export const PROFILE_EXTRAS = {
   'Acme Events Co': {
     email: 'contact@acmeevents.com',
     phone: '+1 (415) 555-0139',
@@ -198,129 +226,12 @@ const PROFILE_EXTRAS = {
   },
 };
 
-// -----------------------------------------------------------------------------
-// Filter helpers (pure)
-// -----------------------------------------------------------------------------
-
-function matchSearch(row, search) {
-  if (!search) return true;
-  const q = search.trim().toLowerCase();
-  return (
-    row.businessName.toLowerCase().includes(q) ||
-    row.application.toLowerCase().includes(q) ||
-    row.tag.some((t) => t.toLowerCase().includes(q))
-  );
-}
-
-export function applyFilters(rows, searchValue, filters) {
-  let result = rows;
-  const search = (searchValue || '').trim().toLowerCase();
-
-  result = result.filter((row) => matchSearch(row, search));
-
-  if (filters.application) {
-    result = result.filter((row) => row.application === filters.application);
+export function persistRows() {
+  try {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(DATA_FILE, JSON.stringify(MOCK_ROWS, null, 2));
+  } catch (err) {
+    console.error('Failed to persist MOCK_ROWS to disk:', err);
   }
-  if (filters.status?.length) {
-    const statusSet = new Set(filters.status);
-    result = result.filter((row) => statusSet.has(row.currentStatus));
-  }
-  if (filters.payment?.length) {
-    const paymentSet = new Set(filters.payment);
-    result = result.filter((row) => paymentSet.has(row.payment));
-  }
-
-  return result;
 }
 
-const MOCK_DELAY_MS = 300;
-const PROFILE_DELAY_MS = 200;
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
-
-/**
- * Returns the full dataset (client-side filtering happens in App).
- * @returns {Promise<Array>} All rows
- */
-export function getData() {
-  return fetch(`${API_BASE_URL}/api/applications`)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Failed to load applications: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((data) => {
-      if (Array.isArray(data)) return data;
-      if (Array.isArray(data.rows)) return data.rows;
-      return [];
-    })
-    .catch(() =>
-      // Fallback to local mock data if backend is unavailable
-      new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([...MOCK_ROWS]);
-        }, MOCK_DELAY_MS);
-      }),
-    );
-}
-
-/**
- * Returns a single applicant profile by businessName, with optional extra fields.
- * @param {string} businessName
- * @returns {Promise<{ ok: boolean, row: object | null }>}
- */
-export function getApplicantProfile(businessName) {
-  return fetch(
-    `${API_BASE_URL}/api/profile/${encodeURIComponent(businessName)}`,
-  )
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Failed to load profile: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch(() =>
-      // Fallback to local mock logic if backend is unavailable
-      new Promise((resolve) => {
-        setTimeout(() => {
-          const row = MOCK_ROWS.find((r) => r.businessName === businessName);
-          if (!row) {
-            resolve({ ok: false, row: null });
-            return;
-          }
-          const extras = PROFILE_EXTRAS[row.businessName] || {};
-          resolve({ ok: true, row: { ...row, ...extras } });
-        }, PROFILE_DELAY_MS);
-      }),
-    );
-}
-
-/**
- * Bulk update status for the given business names.
- * Backend updates its in-memory store; frontend also updates local state.
- * @param {string[]} businessNames
- * @param {string} status
- * @returns {Promise<{ ok: boolean }>}
- */
-export function bulkUpdateStatus(businessNames, status) {
-  if (!Array.isArray(businessNames) || !status) {
-    return Promise.resolve({ ok: false });
-  }
-
-  return fetch(`${API_BASE_URL}/api/applications/bulk-status`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ businessNames, status }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Failed to bulk update status: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch(() => ({ ok: false }));
-}

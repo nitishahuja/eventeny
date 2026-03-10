@@ -46,7 +46,12 @@ function formatDate(dateStr) {
   });
 }
 
-function Table({ rows = [], loading = false, onViewApplicant }) {
+function Table({
+  rows = [],
+  loading = false,
+  onViewApplicant,
+  onBulkStatusChange,
+}) {
   const [sortDir, setSortDir] = useState('asc');
   const [selected, setSelected] = useState(new Set());
   const [page, setPage] = useState(1);
@@ -121,16 +126,19 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
   const someSelected = selected.size > 0;
 
   const handleBulkChangeStatus = () => {
-    if (!someSelected) return;
-    const count = selected.size;
-    // Mocked implementation: surface intent to the user.
-    if (typeof window !== 'undefined' && window.alert) {
-      window.alert(
-        `Change status to "${bulkStatus}" for ${count} selected ${
-          count === 1 ? 'row' : 'rows'
-        }. (Mock action)`,
-      );
-    }
+    if (!someSelected || !onBulkStatusChange) return;
+
+    const businessNames = [];
+    selected.forEach((idx) => {
+      const row = sortedRows[idx];
+      if (row?.businessName) {
+        businessNames.push(row.businessName);
+      }
+    });
+
+    if (!businessNames.length) return;
+
+    onBulkStatusChange(businessNames, bulkStatus);
   };
 
   if (loading) {
