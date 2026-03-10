@@ -1,7 +1,3 @@
-// -----------------------------------------------------------------------------
-// Filter helpers (pure)
-// -----------------------------------------------------------------------------
-
 function matchSearch(row, search) {
   if (!search) return true;
   const q = search.trim().toLowerCase();
