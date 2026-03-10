@@ -77,6 +77,66 @@
   color: var(--color-accent);
 }
 
+.table-bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+}
+
+.table-bulk-status {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+/* Inline usage of SelectDropdown inside bulk bar */
+.table-bulk-status .select-dropdown {
+  margin-bottom: 0;
+  width: auto;
+}
+
+.table-bulk-status .select-dropdown-wrap {
+  min-width: 0;
+}
+
+.table-bulk-status .select-dropdown-trigger {
+  width: auto;
+  min-width: 160px;
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.table-bulk-status-label {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.table-bulk-primary,
+.table-bulk-secondary {
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-medium);
+  background: var(--color-bg);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.table-bulk-primary {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.table-bulk-primary:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
 .table-bulk-clear {
   padding: 0.375rem 0.75rem;
   border: 1px solid var(--color-accent);
@@ -202,7 +262,7 @@
   min-width: 0;
   max-width: 100%;
   overflow-x: auto;
-  overflow-y: auto;
+  overflow-y: visible;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   overscroll-behavior-x: contain;
@@ -387,6 +447,17 @@
 
 .table-cell--status {
   width: 1%;
+}
+
+/* Status dropdown usage inside table cells */
+.status-dropdown {
+  margin-bottom: 0;
+  position: relative;
+  z-index: 20;
+}
+
+.status-dropdown .select-dropdown-trigger {
+  border: none;
 }
 
 .table-status-text {

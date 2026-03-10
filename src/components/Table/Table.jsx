@@ -7,6 +7,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import useIsMobile from '../../hooks/useIsMobile';
+import SelectDropdown from '../common/SelectDropdown/SelectDropdown';
 import './Table.css';
 
 const ROWS_PER_PAGE = 5;
@@ -17,6 +18,24 @@ const STATUS_COLORS = {
   Rejected: 'table-status--rejected',
   Withdrawn: 'table-status--withdrawn',
 };
+
+const STATUS_OPTIONS = Object.keys(STATUS_COLORS);
+
+function StatusDropdown({ value }) {
+  const colorClass = STATUS_COLORS[value] || '';
+  return (
+    <SelectDropdown
+      value={value}
+      options={STATUS_OPTIONS}
+      onChange={() => {}}
+      placeholder='Change status'
+      ariaLabel={`${value} status`}
+      className='status-dropdown'
+      triggerClassName={`table-status table-status-pill ${colorClass}`}
+      disabled
+    />
+  );
+}
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
@@ -32,6 +51,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
   const [selected, setSelected] = useState(new Set());
   const [page, setPage] = useState(1);
   const isMobile = useIsMobile();
+  const [bulkStatus, setBulkStatus] = useState('Approved');
 
   const sortedRows = useMemo(() => {
     const arr = [...rows];
@@ -59,9 +79,17 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
 
   const toggleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelected(
-        new Set(pageRows.map((_, i) => (page - 1) * ROWS_PER_PAGE + i)),
+      const next = new Set(
+        pageRows.map((_, i) => (page - 1) * ROWS_PER_PAGE + i),
       );
+      setSelected(next);
+      if (next.size > 0) {
+        const firstIdx = Math.min(...next);
+        const firstRow = sortedRows[firstIdx];
+        if (firstRow?.currentStatus) {
+          setBulkStatus(firstRow.currentStatus);
+        }
+      }
     } else {
       setSelected(new Set());
     }
@@ -72,6 +100,15 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
       const next = new Set(prev);
       if (next.has(idx)) next.delete(idx);
       else next.add(idx);
+
+      if (next.size > 0 && prev.size === 0) {
+        const firstIdx = Math.min(...next);
+        const firstRow = sortedRows[firstIdx];
+        if (firstRow?.currentStatus) {
+          setBulkStatus(firstRow.currentStatus);
+        }
+      }
+
       return next;
     });
   };
@@ -82,6 +119,19 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
     pageRows.length > 0 &&
     pageRows.every((_, i) => selected.has((page - 1) * ROWS_PER_PAGE + i));
   const someSelected = selected.size > 0;
+
+  const handleBulkChangeStatus = () => {
+    if (!someSelected) return;
+    const count = selected.size;
+    // Mocked implementation: surface intent to the user.
+    if (typeof window !== 'undefined' && window.alert) {
+      window.alert(
+        `Change status to "${bulkStatus}" for ${count} selected ${
+          count === 1 ? 'row' : 'rows'
+        }. (Mock action)`,
+      );
+    }
+  };
 
   if (loading) {
     return (
@@ -136,14 +186,38 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
           <span className='table-bulk-count'>
             {selected.size} {selected.size === 1 ? 'row' : 'rows'} selected
           </span>
-          <button
-            type='button'
-            className='table-bulk-clear'
-            onClick={clearSelection}
-            aria-label='Clear selection'
-          >
-            Clear selection
-          </button>
+          <div className='table-bulk-actions'>
+            <div className='table-bulk-status'>
+              <SelectDropdown
+                value={bulkStatus}
+                options={[
+                  'Approved',
+                  'Waitlisted',
+                  'Withdrawn',
+                  'Awaiting decision',
+                  'Rejected',
+                ]}
+                onChange={setBulkStatus}
+                placeholder='Change status'
+                ariaLabel='Bulk status'
+              />
+              <button
+                type='button'
+                className='table-bulk-primary'
+                onClick={handleBulkChangeStatus}
+              >
+                Apply
+              </button>
+            </div>
+            <button
+              type='button'
+              className='table-bulk-clear'
+              onClick={clearSelection}
+              aria-label='Clear selection'
+            >
+              Clear selection
+            </button>
+          </div>
         </div>
       )}
       {/* Desktop: table layout */}
@@ -262,22 +336,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
                     {row.payment === 'paid' ? 'Paid' : 'Not Paid'}
                   </td>
                   <td className='table-cell table-cell--status'>
-                    <span
-                      className={`table-status table-status-pill ${
-                        STATUS_COLORS[row.currentStatus] || ''
-                      }`}
-                      aria-label={`${row.currentStatus} status`}
-                    >
-                      <span className='table-status-text'>
-                        {row.currentStatus}
-                      </span>
-                      <ChevronDown
-                        size={14}
-                        strokeWidth={2}
-                        aria-hidden
-                        className='table-status-icon'
-                      />
-                    </span>
+                    <StatusDropdown value={row.currentStatus} />
                   </td>
                   <td className='table-cell'>{formatDate(row.date)}</td>
                   <td className='table-cell table-cell--action'>

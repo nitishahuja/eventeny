@@ -2,6 +2,10 @@
   margin-bottom: 1rem;
 }
 
+.select-dropdown-wrap {
+  position: relative;
+}
+
 .select-dropdown-trigger {
   display: flex;
   align-items: center;
@@ -29,7 +33,10 @@
 }
 
 .select-dropdown-list {
-  position: static;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   margin: 4px 0 0 0;
   padding: 0.25rem 0;
   list-style: none;
@@ -41,6 +48,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   touch-action: pan-y;
+  z-index: 50;
 }
 
 .select-dropdown-option {

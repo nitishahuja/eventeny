@@ -165,6 +165,37 @@ describe('Table', () => {
     ).toBeInTheDocument();
   });
 
+  it('shows bulk status and message actions when rows are selected', () => {
+    render(<Table rows={mockRows} />);
+    fireEvent.click(
+      screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
+    );
+
+    expect(
+      screen.getByRole('button', { name: /apply/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /bulk status/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('bulk actions trigger mocked behavior', () => {
+    // Some environments may not define window.alert; ensure it exists for the spy.
+    // eslint-disable-next-line no-global-assign
+    window.alert = window.alert || (() => {});
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    render(<Table rows={mockRows} />);
+
+    fireEvent.click(
+      screen.getAllByRole('checkbox', { name: /select acme corp/i })[0],
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /apply/i }));
+
+    expect(alertSpy).toHaveBeenCalled();
+    alertSpy.mockRestore();
+  });
+
   it('clear selection button clears selection and hides bulk bar', () => {
     render(<Table rows={mockRows} />);
     fireEvent.click(

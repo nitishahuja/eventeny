@@ -8,6 +8,9 @@ function SelectDropdown({
   onChange,
   placeholder = '',
   ariaLabel = 'Select option',
+  className = '',
+  triggerClassName = '',
+  disabled = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapRef = useRef(null);
@@ -29,15 +32,22 @@ function SelectDropdown({
   };
 
   return (
-    <div className='select-dropdown' ref={wrapRef}>
+    <div className={`select-dropdown ${className}`} ref={wrapRef}>
       <div className='select-dropdown-wrap'>
         <button
           type='button'
-          className='select-dropdown-trigger'
-          aria-expanded={isOpen}
+          className={`select-dropdown-trigger ${triggerClassName}`}
+          aria-expanded={disabled ? false : isOpen}
           aria-haspopup='listbox'
           aria-label={ariaLabel}
-          onClick={() => setIsOpen((o) => !o)}
+          onClick={
+            disabled
+              ? undefined
+              : () => {
+                  setIsOpen((o) => !o);
+                }
+          }
+          disabled={disabled}
         >
           <span>{value || placeholder}</span>
           <ChevronDown size={16} strokeWidth={2} aria-hidden />
