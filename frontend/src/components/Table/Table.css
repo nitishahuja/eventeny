@@ -69,6 +69,12 @@
   background: var(--color-accent-tint);
   border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.table-bulk-bar:has(.select-dropdown-trigger[aria-expanded='true']) {
+  z-index: 6;
 }
 
 .table-bulk-count {
@@ -299,6 +305,18 @@
   background: var(--color-bg-hover);
 }
 
+/* Table stacking: allow an "open dropdown" row to appear above later rows.
+   Without this, table paint order can cause later rows to overlap the menu,
+   making options under the row unclickable. */
+.table tbody tr {
+  position: relative;
+  z-index: 0;
+}
+
+.table tbody tr:has(.select-dropdown-trigger[aria-expanded='true']) {
+  z-index: 5;
+}
+
 .table-row--selected {
   background: var(--color-accent-tint-light);
 }
@@ -449,11 +467,23 @@
   width: 1%;
 }
 
+/* Allow status dropdown menus to escape the cell (default cells clip overflow) */
+.table td.table-cell--status,
+.table th.table-cell--status {
+  overflow: visible;
+  position: relative; /* enables z-index to take effect */
+  z-index: 1;
+}
+
 /* Status dropdown usage inside table cells */
 .status-dropdown {
   margin-bottom: 0;
   position: relative;
   z-index: 20;
+}
+
+.status-dropdown .select-dropdown-list {
+  z-index: 200;
 }
 
 .status-dropdown .select-dropdown-trigger {

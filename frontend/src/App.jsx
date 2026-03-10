@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import Search from './components/Search/Search';
 import Filters from './components/Filters/Filters';
 import Table from './components/Table/Table';
@@ -21,25 +21,52 @@ function App() {
   });
   const [allRows, setAllRows] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
   const [applicationOptions, setApplicationOptions] = useState([]);
   const [selectedApplicant, setSelectedApplicant] = useState(null);
   const profileCacheRef = useRef(new Map());
+  const isMountedRef = useRef(true);
   const [toast, setToast] = useState(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    getData().then((data) => {
-      if (cancelled) return;
-      setAllRows(data);
-      setApplicationOptions(
-        [...new Set(data.map((r) => r.application).filter(Boolean))].sort(),
-      );
-      setLoading(false);
-    });
-    return () => {
-      cancelled = true;
-    };
+  const loadApplications = useCallback(async () => {
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const data = await getData();
+      if (isMountedRef.current) {
+        setAllRows(data);
+        setApplicationOptions(
+          [...new Set(data.map((r) => r.application).filter(Boolean))].sort(),
+        );
+      }
+    } catch (err) {
+      if (isMountedRef.current) {
+        setAllRows([]);
+        setApplicationOptions([]);
+        const message =
+          err instanceof Error
+            ? err.message
+            : 'Unable to load applications. Please try again.';
+        setLoadError(message);
+        setToast({
+          message: `Unable to load applications. ${message}`,
+          variant: 'error',
+        });
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
+    }
   }, []);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    loadApplications();
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [loadApplications]);
 
   const rows = useMemo(
     () => applyFilters(allRows, searchValue, filters),
@@ -72,7 +99,6 @@ function App() {
       return;
     }
 
-    // Persist to backend first; only update local state when it succeeds
     try {
       const result = await bulkUpdateStatus(businessNames, status);
       if (!result?.ok) {
@@ -139,6 +165,13 @@ function App() {
               className='app-main'
               tabIndex={-1}
             >
+              {loadError && !loading && (
+                <div style={{ padding: '0.75rem' }}>
+                  <button type='button' onClick={loadApplications}>
+                    Retry
+                  </button>
+                </div>
+              )}
               <Table
                 key={`${searchValue}|${filters.application}|${filters.status.join(',')}|${filters.payment.join(',')}`}
                 rows={rows}
