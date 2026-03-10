@@ -34,15 +34,17 @@ The goal was to translate a Figma design into **production-ready, accessible UI*
 ### Code structure review
 
 - **High-level structure**
-  - `src/App.jsx`: top-level composition; owns global state for search, filters, rows, and selected applicant. Handles data loading and passes filtered rows to `Table`.
-  - `src/api/mockApi.js`: mock dataset and pure helpers (`applyFilters`, `getData`, `getApplicantProfile`).
-  - `src/components/`
-    - `Search/`: search input with debounce and clear affordance.
-    - `Filters/`: advanced filter trigger + panel (desktop popover + mobile bottom sheet), including `SelectDropdown` for Application.
-    - `Table/`: desktop table + mobile card layout, sorting, bulk selection with bulk status action, pagination.
-    - `Profile/`: applicant profile detail page (bonus feature).
-    - `common/SelectDropdown/`: reusable select dropdown used by Filters (Application) and Table (bulk status + status pill styling).
-  - `src/hooks/useIsMobile.js`: small hook around `matchMedia` for responsive behavior in JS (used in Filters + Table pagination).
+  - `frontend/`: Vite React app (current implementation).
+    - `frontend/src/App.jsx`: top-level composition; owns global state for search, filters, rows, and selected applicant. Handles data loading and passes filtered rows to `Table`.
+    - `frontend/src/api/mockApi.js`: mock dataset and pure helpers (`applyFilters`, `getData`, `getApplicantProfile`).
+    - `frontend/src/components/`
+      - `Search/`: search input with debounce and clear affordance.
+      - `Filters/`: advanced filter trigger + panel (desktop popover + mobile bottom sheet), including `SelectDropdown` for Application.
+      - `Table/`: desktop table + mobile card layout, sorting, bulk selection with bulk status action, pagination.
+      - `Profile/`: applicant profile detail page (bonus feature).
+      - `common/SelectDropdown/`: reusable select dropdown used by Filters (Application) and Table (bulk status + status pill styling).
+    - `frontend/src/hooks/useIsMobile.js`: small hook around `matchMedia` for responsive behavior in JS (used in Filters + Table pagination).
+  - `backend/`: reserved for a future real API implementation (kept in the same git repo, not yet implemented).
 
 - **Component hierarchy (simplified)**
   - `App`
@@ -171,8 +173,12 @@ The assignment already required specific behaviors for **Search**, **Advanced fi
 
 ### Setup
 
+From the repo root:
+
 ```bash
-npm install
+npm install        # installs root dev scripts only
+cd frontend
+npm install        # install frontend dependencies
 npm run dev
 ```
 
