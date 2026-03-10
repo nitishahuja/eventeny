@@ -66,7 +66,7 @@ describe('SelectDropdown', () => {
     fireEvent.click(trigger);
     expect(screen.getByRole('listbox')).toBeInTheDocument();
 
-    fireEvent.mouseDown(screen.getByTestId('outside'));
+    fireEvent.click(screen.getByTestId('outside'));
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 

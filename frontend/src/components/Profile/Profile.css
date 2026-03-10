@@ -67,12 +67,24 @@
   gap: 0.375rem;
 }
 
+.profile-hero-sub {
+  display: grid;
+  gap: 0.25rem;
+}
+.profile-hero-subline {
+  font-size: 0.9375rem;
+  opacity: 0.95;
+}
+
 .profile-tags {
   display: flex;
   gap: 0.25rem;
   flex-wrap: wrap;
 }
 .profile-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
   background: rgba(255, 255, 255, 0.18);
   color: var(--color-bg);
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -185,13 +197,16 @@
   gap: 0.5rem 1rem;
 }
 .profile-k {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
   font-size: 0.8125rem;
   color: var(--color-text-placeholder);
 }
 .profile-v {
   font-weight: 400;
   color: var(--color-text);
+  margin-left: 0.25rem;
 }
 .profile-link {
   color: var(--color-accent);
@@ -247,6 +262,50 @@
 .profile-notes {
   margin: 0;
   color: var(--color-text-muted);
+}
+
+.profile-notes--tight {
+  margin-top: 0.5rem;
+}
+
+.profile-inline-section {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.profile-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.profile-pill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.profile-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-light);
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+}
+
+.profile-pill--warn {
+  background: var(--color-status-awaiting-bg);
+  border-color: rgba(146, 64, 14, 0.25);
+  color: var(--color-status-awaiting-text);
 }
 
 /* Documents list */
