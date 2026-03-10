@@ -22,6 +22,7 @@ function Profile({ applicant, onBack }) {
 
   const emailSlug = businessName.toLowerCase().replace(/[^a-z0-9]+/g, '.');
   const email = `${emailSlug}@example.com`;
+  const resolvedEmail = applicant.email || email;
 
   return (
     <section className="profile" aria-labelledby="profile-title">
@@ -58,7 +59,7 @@ function Profile({ applicant, onBack }) {
         <div className="profile-hero-actions" role="group" aria-label="Primary actions">
           <a
             className="profile-btn profile-btn--ghost"
-            href={`mailto:${email}`}
+            href={`mailto:${resolvedEmail}`}
             aria-label={`Email ${businessName}`}
           >
             <Mail size={16} aria-hidden /> Message
@@ -104,7 +105,7 @@ function Profile({ applicant, onBack }) {
           <ul className="profile-list" role="list">
             <li>
               <Mail size={16} aria-hidden />
-              <a className="profile-link" href={`mailto:${applicant.email || email}`}>{applicant.email || email}</a>
+              <a className="profile-link" href={`mailto:${resolvedEmail}`}>{resolvedEmail}</a>
             </li>
             <li>
               <Phone size={16} aria-hidden />
@@ -156,7 +157,7 @@ function Profile({ applicant, onBack }) {
       <div className="profile-sticky-actions" role="group" aria-label="Profile actions">
         <a
           className="profile-btn profile-btn--primary"
-          href={`mailto:${email}`}
+          href={`mailto:${resolvedEmail}`}
           aria-label={`Email ${businessName}`}
         >
           <Mail size={16} aria-hidden /> Message

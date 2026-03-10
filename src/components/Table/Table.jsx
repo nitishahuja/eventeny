@@ -6,6 +6,7 @@ import {
   ChevronRight,
   ChevronDown,
 } from 'lucide-react';
+import useIsMobile from '../../hooks/useIsMobile';
 import './Table.css';
 
 const ROWS_PER_PAGE = 5;
@@ -30,6 +31,7 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
   const [sortDir, setSortDir] = useState('asc');
   const [selected, setSelected] = useState(new Set());
   const [page, setPage] = useState(1);
+  const isMobile = useIsMobile();
 
   const sortedRows = useMemo(() => {
     const arr = [...rows];
@@ -428,13 +430,50 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
           role='group'
           aria-label='Page numbers'
         >
-          {Array.from({ length: Math.min(9, totalPages) }, (_, i) => {
-            let p;
-            if (totalPages <= 9) p = i + 1;
-            else if (page <= 5) p = i + 1;
-            else if (page >= totalPages - 4) p = totalPages - 8 + i;
-            else p = page - 4 + i;
-            return (
+          {(() => {
+            if (totalPages <= 1) {
+              const p = 1;
+              return (
+                <button
+                  key={p}
+                  type='button'
+                  className={`table-pagination-page ${page === p ? 'table-pagination-page--active' : ''}`}
+                  onClick={() => setPage(p)}
+                  aria-label={`Page ${p}`}
+                  aria-current={page === p ? 'page' : undefined}
+                >
+                  {p}
+                </button>
+              );
+            }
+
+            const pagesToRender = [];
+
+            if (isMobile) {
+              if (totalPages === 2) {
+                pagesToRender.push(1, 2);
+              } else {
+                const startPage = Math.min(
+                  Math.max(1, page - 1),
+                  totalPages - 2,
+                );
+                pagesToRender.push(startPage, startPage + 1, startPage + 2);
+              }
+            } else {
+              const windowSize = Math.min(9, totalPages);
+              const halfWindow = Math.floor(windowSize / 2);
+              let startPage = Math.max(1, page - halfWindow);
+              let endPage = startPage + windowSize - 1;
+              if (endPage > totalPages) {
+                endPage = totalPages;
+                startPage = Math.max(1, endPage - windowSize + 1);
+              }
+              for (let p = startPage; p <= endPage; p += 1) {
+                pagesToRender.push(p);
+              }
+            }
+
+            return pagesToRender.map((p) => (
               <button
                 key={p}
                 type='button'
@@ -445,8 +484,8 @@ function Table({ rows = [], loading = false, onViewApplicant }) {
               >
                 {p}
               </button>
-            );
-          })}
+            ));
+          })()}
         </div>
         <button
           type='button'

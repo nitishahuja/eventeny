@@ -212,7 +212,7 @@ function matchSearch(row, search) {
   );
 }
 
-function applyFilters(rows, searchValue, filters) {
+export function applyFilters(rows, searchValue, filters) {
   let result = rows;
   const search = (searchValue || '').trim().toLowerCase();
 
@@ -237,16 +237,14 @@ const MOCK_DELAY_MS = 300;
 const PROFILE_DELAY_MS = 200;
 
 /**
- * Returns rows filtered by search and filters.
- * @param {string} [searchValue=''] - Search in businessName, application, and tags
- * @param {Object} [filters={}] - { application?: string, status?: string[], payment?: string[] }
- * @returns {Promise<Array>} Matching rows
+ * Returns the full dataset (client-side filtering happens in App).
+ * @returns {Promise<Array>} All rows
  */
-export function getData(searchValue = '', filters = {}) {
+export function getData() {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const rows = applyFilters([...MOCK_ROWS], searchValue, filters);
-      resolve(rows);
+      // Client-side filtering happens in App; API returns full dataset.
+      resolve([...MOCK_ROWS]);
     }, MOCK_DELAY_MS);
   });
 }

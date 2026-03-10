@@ -3,38 +3,8 @@ import Search from './components/Search/Search';
 import Filters from './components/Filters/Filters';
 import Table from './components/Table/Table';
 import Profile from './components/Profile/Profile';
-import { getData, getApplicantProfile } from './api/mockApi';
+import { getData, getApplicantProfile, applyFilters } from './api/mockApi';
 import './App.css';
-
-function filterRows(allRows, searchValue, filters) {
-  let rows = [...allRows];
-
-  const search = (searchValue || '').trim().toLowerCase();
-  if (search) {
-    rows = rows.filter(
-      (row) =>
-        row.businessName.toLowerCase().includes(search) ||
-        row.application.toLowerCase().includes(search) ||
-        row.tag.some((t) => t.toLowerCase().includes(search)),
-    );
-  }
-
-  if (filters.application) {
-    rows = rows.filter((row) => row.application === filters.application);
-  }
-
-  if (filters.status && filters.status.length > 0) {
-    const set = new Set(filters.status);
-    rows = rows.filter((row) => set.has(row.currentStatus));
-  }
-
-  if (filters.payment && filters.payment.length > 0) {
-    const set = new Set(filters.payment);
-    rows = rows.filter((row) => set.has(row.payment));
-  }
-
-  return rows;
-}
 
 function App() {
   const [searchValue, setSearchValue] = useState('');
@@ -47,10 +17,11 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [applicationOptions, setApplicationOptions] = useState([]);
   const [selectedApplicant, setSelectedApplicant] = useState(null);
+  const profileCacheRef = useRef(new Map());
 
   useEffect(() => {
     let cancelled = false;
-    getData('', {}).then((data) => {
+    getData().then((data) => {
       if (cancelled) return;
       setAllRows(data);
       setApplicationOptions(
@@ -64,13 +35,22 @@ function App() {
   }, []);
 
   const rows = useMemo(
-    () => filterRows(allRows, searchValue, filters),
+    () => applyFilters(allRows, searchValue, filters),
     [allRows, searchValue, filters],
   );
 
   const handleViewApplicant = async (row) => {
-    const { ok, row: profile } = await getApplicantProfile(row.businessName);
-    setSelectedApplicant(ok && profile ? profile : row);
+    const key = row.businessName;
+    const cached = profileCacheRef.current.get(key);
+    if (cached) {
+      setSelectedApplicant(cached);
+      return;
+    }
+
+    const { ok, row: profile } = await getApplicantProfile(key);
+    const resolved = ok && profile ? profile : row;
+    profileCacheRef.current.set(key, resolved);
+    setSelectedApplicant(resolved);
   };
 
   const handleBackToList = () => setSelectedApplicant(null);

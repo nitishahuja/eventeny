@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Search as SearchIcon, X } from 'lucide-react';
 import './Search.css';
 
@@ -8,6 +8,15 @@ const DEBOUNCE_MS = 300;
 function Search({ value = '', onChange }) {
   const [localValue, setLocalValue] = useState(value);
   const debounceRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
+    };
+  }, []);
 
   const commitValue = useCallback(
     (next) => {
