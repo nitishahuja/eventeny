@@ -255,7 +255,16 @@ export function getData() {
       if (Array.isArray(data)) return data;
       if (Array.isArray(data.rows)) return data.rows;
       return [];
-    });
+    })
+    .catch(
+      () =>
+        // Fallback to local mock data if backend is unavailable
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve([...MOCK_ROWS]);
+          }, MOCK_DELAY_MS);
+        }),
+    );
 }
 
 /**
@@ -272,7 +281,22 @@ export function getApplicantProfile(businessName) {
         throw new Error(`Failed to load profile: ${res.status}`);
       }
       return res.json();
-    });
+    })
+    .catch(
+      () =>
+        // Fallback to local mock logic if backend is unavailable
+        new Promise((resolve) => {
+          setTimeout(() => {
+            const row = MOCK_ROWS.find((r) => r.businessName === businessName);
+            if (!row) {
+              resolve({ ok: false, row: null });
+              return;
+            }
+            const extras = PROFILE_EXTRAS[row.businessName] || {};
+            resolve({ ok: true, row: { ...row, ...extras } });
+          }, PROFILE_DELAY_MS);
+        }),
+    );
 }
 
 /**

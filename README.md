@@ -68,7 +68,7 @@ The goal was to translate a Figma design into **production-ready, accessible UI*
     - `Table`: sort direction, page, bulk selection; reset by remount when filters/search change (via `key` on `<Table />`).
     - `SelectDropdown`: open/close state and option selection.
   - **Data layer approach:**
-    - `getData()` and `getApplicantProfile()` call the backend (via `mockApi.js`) and surface real network errors if the API is unavailable.
+    - `getData()` and `getApplicantProfile()` call the backend first (via `mockApi.js`), but fall back to local mock data if the API is unavailable.
     - **All filtering is done client-side** in `App` using `applyFilters`, so the backend can remain simple and stateless from a querying perspective.
 
 - **Styling approach**
